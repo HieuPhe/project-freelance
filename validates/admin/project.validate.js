@@ -18,17 +18,19 @@ module.exports.createPost = (req, res, next) => {
   }
 
   // Validate
-  if (isNaN(req.body.budgetMin) || isNaN(req.body.budgetMax)) {
+     const min= parseInt(req.body.budgetMin);
+     const max= parseInt(req.body.budgetMax);
+  if (isNaN(min) || isNaN(max)) {
     req.flash("warning", "Ngân sách phải là số!");
     res.redirect(req.get("referer") || "/");
     return;
   }
-  if (req.body.budgetMin <= 0 || req.body.budgetMax <= 0) {
+  if (min <= 0 || max <= 0) {
     req.flash("warning", "Ngân sách không được nhỏ hơn hoặc bằng 0!");
     res.redirect(req.get("referer") || "/");
     return;
   }
-  if (req.body.budgetMin > req.body.budgetMax) {
+  if (min > max) {
     req.flash("warning", "Ngân sách tối thiểu không được lớn hơn tối đa!");
     res.redirect(req.get("referer") || "/");
     return;
