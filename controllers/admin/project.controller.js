@@ -196,8 +196,8 @@ module.exports.editPatch = async (req, res) => {
   const id = req.params.id;
 
   req.body.budget = {
-    min: req.body.budgetMin,
-    max: req.body.budgetMax,
+    min: parseInt(req.body.budgetMin),
+    max: parseInt(req.body.budgetMax),
   };
   req.body.position = parseInt(req.body.position);
   // Phần ảnh
