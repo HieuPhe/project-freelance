@@ -1,37 +1,39 @@
-const mongoose = require("mongoose");
+const  mongoose  = require("mongoose");
+const slug = require("mongoose-slug-updater");
 
-const projectSchema = new mongoose.Schema({
-  employerId: { type: mongoose.Schema.Types.ObjectId, ref: "Employer", required: true },
-  title: { type: String, required: true },
-  description: String,
-  skills: [
-    {
-      skillId: { type: mongoose.Schema.Types.ObjectId, ref: "Skill" },
-      name: String,
-      slug: String,
+mongoose.plugin(slug);
+
+const projectSchema = new mongoose.Schema(
+  {
+    title: String,
+    description: String,
+    budget: {
+      min: Number,
+      max: Number,
     },
-  ],
-  budget: {
-    min: Number,
-    max: Number,
-    type: { type: String, enum: ["FIXED", "HOURLY"], required: true },
-  },
-  deadline: Date,
-  attachments: [
-    {
-      fileUrl: String,
-      fileName: String,
-      fileSize: Number,
+    deadline: Date,
+    status: {
+      type: String,
+      enum: ["OPEN", "IN_PROGRESS", "CLOSED", "CANCELLED"],
+      default: "OPEN",
     },
-  ],
-  status: {
-    type: String,
-    enum: ["OPEN", "IN_PROGRESS", "CLOSED", "CANCELLED"],
-    default: "OPEN",
+    position: Number,
+    slug: {
+      type: String,
+      slug: "title",
+      unique: true
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
+    deleteAt: Date,
   },
-}, {
-  timestamps: true,
-});
+  {
+    timestamps: true,
+  }
+);
 
 const Project = mongoose.model("Project", projectSchema, "projects");
+
 module.exports = Project;

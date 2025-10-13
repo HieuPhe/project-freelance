@@ -1,0 +1,136 @@
+/* Header */
+.header {
+  background: #202020;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.header .inner-logo a {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+}
+/* End Header */
+
+/* Body */
+.body .sider {
+  width: 150px;
+  background: #323232;
+  color: #fff;
+  height: calc(100vh - 56px);
+  position: fixed;
+  top: 56px;
+  left: 0;
+}
+
+.body .main {
+  margin: 15px;
+  position: relative;
+  left: 150px;
+  width: calc(100% - 180px);
+}
+/* End Body */
+
+/* Sider */
+.sider .inner-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sider .inner-menu ul li a {
+  color: #fff;
+  display: block;
+  padding: 6px 10px;
+  border-bottom: 1px solid #515151;
+}
+/* End Sider */
+
+/* Show Alert */
+[show-alert] {
+  position: fixed;
+  top: 70px;
+  right: 15px;
+  z-index: 9999;
+  padding: 14px 25px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  animation: alert-show 0.5s ease, alert-hidden 0.5s ease 3s forwards;
+}
+
+[show-alert].alert-success {
+  background: linear-gradient(135deg, #00c853, #64dd17);
+}
+
+[show-alert].alert-danger {
+  background: linear-gradient(135deg, #ff1744, #d50000);
+}
+
+[show-alert].alert-warning {
+  background: linear-gradient(135deg, #ffe082, #ffb300);
+}
+
+
+[show-alert] [close-alert] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.85);
+  color: #333;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+[show-alert] [close-alert]:hover {
+  background: #fff;
+  color: #000;
+  transform: scale(1.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+@keyframes alert-show {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes alert-hidden {
+  to {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+/* End Show Alert */
+
+/* Image Preview */
+/* .image-preview {
+  width: 150px;
+  height: auto;
+  margin-top: 15px;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.image-preview[src=""] {
+  display: none;
+} */
+/* End Image Preview */

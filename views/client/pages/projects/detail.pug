@@ -1,0 +1,26 @@
+extends ../../layouts/default 
+
+block main 
+  .container.my-3 
+    .row 
+      .col-12 
+        if (project.title)
+          h1(class="mb-4") #{project.title}
+
+        if (project.budget)
+          div(class="mb-4") Ngân sách: <b>#{project.budget.min} - #{project.budget.max} VNĐ</b>
+
+        if (project.deadline)
+          - const d = new Date(project.deadline);
+          - const formattedDate = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+          div(class="mb-4") Hạn chào giá: <b>#{formattedDate}</b>
+
+        //- if (project.thumbnail)
+        //-   div(class="mb-4")
+        //-     img(
+        //-       src=project.thumbnail
+        //-       style="width: 100px"
+        //-     )
+
+        if (project.description)
+          div(class="mb-4") Mô tả: #{project.description}

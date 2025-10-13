@@ -1,0 +1,46 @@
+extends ../../layouts/default.pug 
+
+block main 
+  if (project.title)
+    h1(class="mb-4") #{project.title}
+
+  if (project.budget)
+    div(class="mb-4") Ngân sách: <b>#{project.budget.min} - #{project.budget.max} VNĐ</b>
+
+  if (project.deadline)
+    - const d = new Date(project.deadline);
+    - const formattedDate = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+    div(class="mb-4") Hạn chào giá: <b>#{formattedDate}</b>
+
+  //- if (project.thumbnail)
+  //-   div(class="mb-4")
+  //-     img(
+  //-       src=project.thumbnail
+  //-       style="width: 100px"
+  //-     )
+
+  if (project.status)
+    div(class="mb-4")
+      span Trang thái: 
+      if (project.status === "OPEN")
+        span(class="badge badge-primary") Đang Mở
+      if (project.status === "IN_PROGRESS")
+        span(class="badge badge-warning") Đang Thực Hiện
+      if (project.status === "CLOSED")
+        span(class="badge badge-success") Hoàn Thành
+      if (project.status === "CANCELLED")
+        span(class="badge badge-danger") Hủy
+
+  if (project.position)
+    div(class="mb-4") Vị trí: <b>#{project.position}</b>
+
+  if (project.description)
+    div(class="mb-4") Mô tả: #{project.description}
+
+  a(
+    href=`${prefixAdmin}/projects/edit/${project.id}`
+    class="btn btn-info"
+  ) Sửa
+
+
+  script(src="/admin/js/project.js") 
