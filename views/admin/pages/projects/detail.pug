@@ -35,7 +35,7 @@ block main
     div(class="mb-4") Vị trí: <b>#{project.position}</b>
 
   if (project.description)
-    div(class="mb-4") Mô tả: #{project.description}
+    div(class="mb-4") Mô tả: !{project.description}
 
   a(
     href=`${prefixAdmin}/projects/edit/${project.id}`

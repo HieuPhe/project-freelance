@@ -30,7 +30,7 @@
     "resend": "^6.1.2",
     "socket.io": "^4.8.1",
     "streamifier": "^0.1.1",
-    "tinymce": "^8.0.2"
+    "tinymce": "^8.1.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
