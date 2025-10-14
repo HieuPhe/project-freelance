@@ -39,8 +39,17 @@ module.exports.index = async (req, res) => {
     countProjects
   );
 
+  // Sắp xếp
+  let sort = {};
+  
+  if (req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue;
+  } else {
+    sort.position = "desc";
+  }
+
   const projects = await Project.find(find)
-    .sort({ position: "desc" })
+    .sort(sort)
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
 
@@ -218,7 +227,7 @@ module.exports.detail = async (req, res) => {
   try {
     const find = {
       deleted: false,
-      _id: req.params.id
+      _id: req.params.id,
     };
 
     const project = await Project.findOne(find);
