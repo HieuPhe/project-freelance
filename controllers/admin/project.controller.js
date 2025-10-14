@@ -157,10 +157,6 @@ module.exports.createPost = async (req, res) => {
   } else {
     req.body.position = parseInt(req.body.position);
   }
-  // Phần ảnh
-  // if (req.file) {
-  //   req.body.thumbnail = `uploads/${req.file.filename}`;
-  // }
 
   // Lưu vào database
   const project = new Project(req.body);
