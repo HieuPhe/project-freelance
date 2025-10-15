@@ -121,7 +121,7 @@
 /* End Show Alert */
 
 /* Image Preview */
-/* .image-preview {
+.image-preview {
   width: 150px;
   height: auto;
   margin-top: 15px;
@@ -132,5 +132,5 @@
 
 .image-preview[src=""] {
   display: none;
-} */
+}
 /* End Image Preview */

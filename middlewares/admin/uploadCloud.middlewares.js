@@ -25,7 +25,7 @@ cloudinary.config({
 
       async function upload(req) {
         let result = await streamUpload(req);
-        req.body[req.file.fieldname] = result.secure.url;
+        req.body[req.file.fieldname] = result.secure_url;
         next();
       }
 
