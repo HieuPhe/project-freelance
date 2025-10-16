@@ -21,7 +21,7 @@ module.exports.index = async (req, res) => {
   });
 };
 
-// [GET] /admin/projects-category
+// [GET] /admin/projects-category/create
 
 module.exports.create = async (req, res) => {
   let find = {
@@ -38,7 +38,7 @@ module.exports.create = async (req, res) => {
   });
 };
 
-// [POST] /admin/projects-category
+// [POST] /admin/projects-category/create
 
 module.exports.createPost = async (req, res) => {
   if (req.body.position == "") {
@@ -53,4 +53,43 @@ module.exports.createPost = async (req, res) => {
   await record.save();
 
   res.redirect(`${systemConfig.prefixAdmin}/projects-category`);
+};
+
+// [GET] /admin/projects-category/edit/:id
+
+module.exports.edit = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const data = await ProjectCategory.findOne({
+      _id: id,
+      deleted: false,
+    });
+
+    const records = await ProjectCategory.find({
+      deleted: false,
+    });
+
+    const newRecords = createTreeHelper.tree(records);
+
+    res.render("admin/pages/projects-category/edit", {
+      pageTitle: "Chỉnh sửa danh mục công việc",
+      data: data,
+      records: newRecords,
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/projects-category`);
+  }
+};
+
+// [PATCH] /admin/projects-category/edit/:id
+
+module.exports.editPatch = async (req, res) => {
+  const id = req.params.id;
+
+  req.body.position = parseInt(req.body.position);
+
+  await ProjectCategory.updateOne({ _id: id }, req.body);
+
+  res.redirect(req.get("referer") || "/");
 };
