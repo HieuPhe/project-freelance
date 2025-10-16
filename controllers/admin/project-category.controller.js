@@ -2,6 +2,8 @@ const ProjectCategory = require("../../models/project-category.model");
 
 const systemConfig = require("../../config/system.js");
 
+const createTreeHelper = require("../../helpers/createTree.js");
+
 // [GET] /admin/projects-category
 
 module.exports.index = async (req, res) => {
@@ -11,17 +13,28 @@ module.exports.index = async (req, res) => {
 
   const records = await ProjectCategory.find(find);
 
+  const newRecords = createTreeHelper.tree(records);
+
   res.render("admin/pages/projects-category/index", {
     pageTitle: "Danh mục công việc",
-    records: records
+    records: newRecords,
   });
 };
 
 // [GET] /admin/projects-category
 
 module.exports.create = async (req, res) => {
+  let find = {
+    deleted: false,
+  };
+
+  const records = await ProjectCategory.find(find);
+
+  const newRecords = createTreeHelper.tree(records);
+
   res.render("admin/pages/projects-category/create", {
     pageTitle: "Tạo danh mục công việc",
+    records: newRecords,
   });
 };
 
