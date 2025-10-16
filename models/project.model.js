@@ -6,6 +6,10 @@ mongoose.plugin(slug);
 const projectSchema = new mongoose.Schema(
   {
     title: String,
+    project_category_id: {
+      type: String,
+      default: ""
+    },
     description: String,
     budget: {
       min: Number,

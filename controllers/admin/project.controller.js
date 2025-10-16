@@ -1,10 +1,12 @@
 const Project = require("../../models/project.model");
+const ProjectCategory = require("../../models/project-category.model");
 
 const systemConfig = require("../../config/system.js");
 
 const filterStatusHelper = require("../../helpers/filterStatus");
 const paginationHelper = require("../../helpers/pagination");
 const searchHelper = require("../../helpers/search");
+const createTreeHelper = require("../../helpers/createTree.js");
 
 // [GET] /admin/projects
 
@@ -41,7 +43,7 @@ module.exports.index = async (req, res) => {
 
   // Sắp xếp
   let sort = {};
-  
+
   if (req.query.sortKey && req.query.sortValue) {
     sort[req.query.sortKey] = req.query.sortValue;
   } else {
@@ -147,8 +149,17 @@ module.exports.deleteItem = async (req, res) => {
 // [GET] /admin/projects/create
 
 module.exports.create = async (req, res) => {
+  let find = {
+    deleted: false,
+  };
+
+  const category = await ProjectCategory.find(find);
+
+  const newCategory = createTreeHelper.tree(category);
+
   res.render("admin/pages/projects/create", {
     pageTitle: "Thêm mới công việc",
+    category: newCategory,
   });
 };
 
@@ -185,9 +196,16 @@ module.exports.edit = async (req, res) => {
 
     const project = await Project.findOne(find);
 
+    const category = await ProjectCategory.find({
+      deleted: false,
+    });
+
+    const newCategory = createTreeHelper.tree(category);
+
     res.render("admin/pages/projects/edit", {
       pageTitle: "Chỉnh sửa công việc",
       project: project,
+      category: newCategory,
     });
   } catch (error) {
     req.flash("error", `Không tồn tại công việc này!`);
@@ -232,9 +250,20 @@ module.exports.detail = async (req, res) => {
 
     const project = await Project.findOne(find);
 
+    const category = await ProjectCategory.find({
+      deleted: false,
+    });
+
+    const found = category.find(
+      (item) => item.id == project.project_category_id
+    );
+
+    const name = found.title;
+
     res.render("admin/pages/projects/detail", {
       pageTitle: project.title,
       project: project,
+      name: name,
     });
   } catch (error) {
     req.flash("error", `Không tồn tại công việc này!`);

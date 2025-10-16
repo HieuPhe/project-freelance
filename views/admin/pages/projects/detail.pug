@@ -1,8 +1,13 @@
 extends ../../layouts/default.pug 
 
+include ../../mixins/select-tree.pug
+
 block main 
   if (project.title)
     h1(class="mb-4") #{project.title}
+
+  if(name)
+    div(class="mb-4") Danh mục: <b>#{name}</b>
 
   if (project.budget)
     div(class="mb-4") Ngân sách: <b>#{project.budget.min} - #{project.budget.max} VNĐ</b>
