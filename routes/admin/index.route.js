@@ -3,6 +3,7 @@ const systemConfig = require("../../config/system");
 const dashboardRoute = require("./dashboard.route");
 const projectRoute = require("./project.route");
 const projectCategoryRoute = require("./project-category.route");
+const roleRoute = require("./role.route");
 
 
 module.exports = (app) => {
@@ -13,4 +14,6 @@ module.exports = (app) => {
   app.use(PATH_ADMIN + "/projects", projectRoute);
 
   app.use(PATH_ADMIN + "/projects-category", projectCategoryRoute);
+
+  app.use(PATH_ADMIN + "/roles", roleRoute);
 };
