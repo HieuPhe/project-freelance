@@ -1,22 +1,22 @@
 // Button Status
-const buttonStatus = document.querySelectorAll("[button-status]");
-if (buttonStatus.length > 0) {
-  let url = new URL(window.location.href);
+// const buttonStatus = document.querySelectorAll("[button-status]");
+// if (buttonStatus.length > 0) {
+//   let url = new URL(window.location.href);
 
-  buttonStatus.forEach((button) => {
-    button.addEventListener("click", () => {
-      const status = button.getAttribute("button-status");
+//   buttonStatus.forEach((button) => {
+//     button.addEventListener("click", () => {
+//       const status = button.getAttribute("button-status");
 
-      if (status) {
-        url.searchParams.set("status", status);
-      } else {
-        url.searchParams.delete("status");
-      }
+//       if (status) {
+//         url.searchParams.set("status", status);
+//       } else {
+//         url.searchParams.delete("status");
+//       }
 
-      window.location.href = url.href;
-    });
-  });
-}
+//       window.location.href = url.href;
+//     });
+//   });
+// }
 
 // End Button Status
 
@@ -160,18 +160,18 @@ if (showAlert) {
 
 // Logic Phần Preview Ảnh
 
-// const uploadImage = document.querySelector("[upload-image]");
-// if (uploadImage) {
-//   const uploadImageInput = document.querySelector("[upload-image-input]");
-//   const uploadImagePreview = document.querySelector("[upload-image-preview]");
+const uploadImage = document.querySelector("[upload-image]");
+if (uploadImage) {
+  const uploadImageInput = document.querySelector("[upload-image-input]");
+  const uploadImagePreview = document.querySelector("[upload-image-preview]");
 
-//   uploadImageInput.addEventListener("change", (e) => {
-//     const file = e.target.files[0];
-//     if (file) {
-//       uploadImagePreview.src = URL.createObjectURL(file);
-//     }
-//   });
-// }
+  uploadImageInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      uploadImagePreview.src = URL.createObjectURL(file);
+    }
+  });
+}
 // End Logic Phần Preview Ảnh
 
 // Sắp xếp

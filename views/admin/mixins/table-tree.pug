@@ -27,19 +27,17 @@ mixin table-tree(items, level = 1)
         )
       td
           if(item.status == "active")
-            a(
+            span(
               href="javascript:;"
               data-status = item.status 
-              data-id = item.id 
-              button-change-status 
+              data-id = item.id  
               class="badge badge-success"
             ) Hoạt động
           else
-            a(
+            span(
               href="javascript:;"
               data-status = item.status 
               data-id = item.id
-              button-change-status  
               class="badge badge-danger"
             ) Dừng hoạt động
       td
@@ -59,3 +57,4 @@ mixin table-tree(items, level = 1)
 
     if item.children && item.children.length > 0
       +table-tree(item.children, level + 1)
+  

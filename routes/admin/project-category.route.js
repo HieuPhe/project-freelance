@@ -20,6 +20,8 @@ router.post(
   controller.createPost
 );
 
+router.delete("/delete/:id", controller.deleteItem);
+
 router.get("/edit/:id", controller.edit);
 
 router.patch(
@@ -29,5 +31,7 @@ router.patch(
   validate.createPost,
   controller.editPatch
 );
+
+router.get("/detail/:id", controller.detail);
 
 module.exports = router;
