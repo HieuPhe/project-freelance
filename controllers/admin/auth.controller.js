@@ -10,14 +10,9 @@ module.exports.login = async (req, res) => {
   if (req.cookies.token) {
     res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
   } else {
-    const user = await Account.findOne({ token: req.cookies.token });
-    if (!user) {
-      res.redirect(`${systemConfig.prefixAdmin}/auth/login`);
-    } else {
-      res.render("admin/pages/auth/login", {
+    res.render("admin/pages/auth/login", {
       pageTitle: "Trang đăng nhập",
     });
-    }
     
   }
 };

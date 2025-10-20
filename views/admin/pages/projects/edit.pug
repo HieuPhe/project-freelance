@@ -4,167 +4,168 @@ include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
 block main
-  +alert-error(3000)
-  +alert-success(3000)
-  +alert-warning(3000)
+  if(role.permissions.includes("project_edit"))
+    +alert-error(3000)
+    +alert-success(3000)
+    +alert-warning(3000)
 
-  h1(class="mb-4") Chỉnh sửa công việc
+    h1(class="mb-4") Chỉnh sửa công việc
 
-  //- enctype="multipart/form-data" thêm class này vào phần form để có thể uploads ảnh
-  form(
-    action=`${prefixAdmin}/projects/edit/${project.id}?_method=PATCH`
-    id="form-edit-project"
-    method="POST" 
-  )
+    //- enctype="multipart/form-data" thêm class này vào phần form để có thể uploads ảnh
+    form(
+      action=`${prefixAdmin}/projects/edit/${project.id}?_method=PATCH`
+      id="form-edit-project"
+      method="POST" 
+    )
 
-    div(class="form-group")
-      label(for="title") Tiêu đề
-      input(
-        type="text"
-        class="form-control"
-        id="title"
-        name="title"
-        required
-        value=project.title
-      )
+      div(class="form-group")
+        label(for="title") Tiêu đề
+        input(
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          required
+          value=project.title
+        )
 
-    div(class="form-group")
-      label(for="project_category_id") Danh mục
-      select(
-        name="project_category_id"
-        id="project_category_id"
-        class="form-control"
-      )
-        option(value="") -- Chọn danh mục --
-        if(category)
-          +select-tree(category, 1, project.project_category_id)
+      div(class="form-group")
+        label(for="project_category_id") Danh mục
+        select(
+          name="project_category_id"
+          id="project_category_id"
+          class="form-control"
+        )
+          option(value="") -- Chọn danh mục --
+          if(category)
+            +select-tree(category, 1, project.project_category_id)
 
-    //- Chọn ảnh dùng multer
+      //- Chọn ảnh dùng multer
 
-    //- div(
-    //-   class="form-group"
-    //-   upload-image
-    //- )
-    //-   label(for="thumbnail") Ảnh
-    //-   input(
-    //-     type="file"
-    //-     class="form-control-file"
-    //-     id="thumbnail"
-    //-     name="thumbnail"
-    //-     accept="image/*"
-    //-     upload-image-input
-    //-   )
-    //-   img(
-    //-     src=project.thumbnail
-    //-     upload-image-preview
-    //-     class="image-preview"
-    //-   )
+      //- div(
+      //-   class="form-group"
+      //-   upload-image
+      //- )
+      //-   label(for="thumbnail") Ảnh
+      //-   input(
+      //-     type="file"
+      //-     class="form-control-file"
+      //-     id="thumbnail"
+      //-     name="thumbnail"
+      //-     accept="image/*"
+      //-     upload-image-input
+      //-   )
+      //-   img(
+      //-     src=project.thumbnail
+      //-     upload-image-preview
+      //-     class="image-preview"
+      //-   )
 
-    div(class="form-group")
-      label(for="desc") Mô tả
-      textarea(
-        class="form-control textarea-mce"
-        id="desc"
-        name="description"
-        rows="5"
-        value=project.description
-      ) #{project.description}
+      div(class="form-group")
+        label(for="desc") Mô tả
+        textarea(
+          class="form-control textarea-mce"
+          id="desc"
+          name="description"
+          rows="5"
+          value=project.description
+        ) #{project.description}
 
-    div(class="form-group")
-      label Ngân sách
-      .row
-        .col-md-6
-          label(for="budget-min") Tối thiểu
-          input(
-            type="number"
-            class="form-control"
-            id="budget-min"
-            name="budgetMin"
-            min="0"
-            value=project.budget.min
-          )
-        .col-md-6
-          label(for="budget-max") Tối đa
-          input(
-            type="number"
-            class="form-control"
-            id="budget-max"
-            name="budgetMax"
-            min="0"
-            value=project.budget.max
-          )
+      div(class="form-group")
+        label Ngân sách
+        .row
+          .col-md-6
+            label(for="budget-min") Tối thiểu
+            input(
+              type="number"
+              class="form-control"
+              id="budget-min"
+              name="budgetMin"
+              min="0"
+              value=project.budget.min
+            )
+          .col-md-6
+            label(for="budget-max") Tối đa
+            input(
+              type="number"
+              class="form-control"
+              id="budget-max"
+              name="budgetMax"
+              min="0"
+              value=project.budget.max
+            )
 
-    div(class="form-group")
-      label(for="deadline") Hạn chào giá
-      input(
-        type="date"
-        class="form-control"
-        id="deadline"
-        name="deadline"
-        value=project.deadline ? project.deadline.toISOString().split('T')[0] : '' 
-      )
+      div(class="form-group")
+        label(for="deadline") Hạn chào giá
+        input(
+          type="date"
+          class="form-control"
+          id="deadline"
+          name="deadline"
+          value=project.deadline ? project.deadline.toISOString().split('T')[0] : '' 
+        )
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusOPEN"
-        name="status"
-        value="OPEN"
-        checked=(project.status == "OPEN" ? true : false)
-      )
-      label(for="statusOPEN" class="form-check-label") Đang mở
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusOPEN"
+          name="status"
+          value="OPEN"
+          checked=(project.status == "OPEN" ? true : false)
+        )
+        label(for="statusOPEN" class="form-check-label") Đang mở
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusIn_progress"
-        name="status"
-        value="IN_PROGRESS"
-        checked=(project.status == "IN_PROGRESS" ? true : false)
-      )
-      label(for="statusIn_progress" class="form-check-label") Đang thực hiện
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusIn_progress"
+          name="status"
+          value="IN_PROGRESS"
+          checked=(project.status == "IN_PROGRESS" ? true : false)
+        )
+        label(for="statusIn_progress" class="form-check-label") Đang thực hiện
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusClosed"
-        name="status"
-        value="CLOSED"
-        checked=(project.status == "CLOSED" ? true : false)
-      )
-      label(for="statusClosed" class="form-check-label") Hoàn thành
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusClosed"
+          name="status"
+          value="CLOSED"
+          checked=(project.status == "CLOSED" ? true : false)
+        )
+        label(for="statusClosed" class="form-check-label") Hoàn thành
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusCancelled"
-        name="status"
-        value="CANCELLED"
-        checked=(project.status == "CANCELLED" ? true : false)
-      )
-      label(for="statusCancelled" class="form-check-label") Hủy
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusCancelled"
+          name="status"
+          value="CANCELLED"
+          checked=(project.status == "CANCELLED" ? true : false)
+        )
+        label(for="statusCancelled" class="form-check-label") Hủy
 
-    div(class="form-group")
-      label(for="position") Vị trí
-      input(
-        type="number"
-        class="form-control"
-        id="position"
-        name="position"
-        placeholder="Tự động tăng"
-        min="1"
-        value=project.position
-      )
+      div(class="form-group")
+        label(for="position") Vị trí
+        input(
+          type="number"
+          class="form-control"
+          id="position"
+          name="position"
+          placeholder="Tự động tăng"
+          min="1"
+          value=project.position
+        )
 
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Cập nhật
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Cập nhật
 
-  script(src="/admin/js/project.js")
+    script(src="/admin/js/project.js")
 

@@ -4,158 +4,159 @@ include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
 block main
-  +alert-error(3000)
+  if(role.permissions.includes("project_create"))
+    +alert-error(3000)
 
-  h1(class="mb-4") Thêm mới công việc
+    h1(class="mb-4") Thêm mới công việc
 
-  //- enctype="multipart/form-data" thêm class này vào phần form để có thể uploads ảnh
-  form(
-    action=`${prefixAdmin}/projects/create`
-    id="form-create-project"
-    method="POST" 
-  )
+    //- enctype="multipart/form-data" thêm class này vào phần form để có thể uploads ảnh
+    form(
+      action=`${prefixAdmin}/projects/create`
+      id="form-create-project"
+      method="POST" 
+    )
 
-    div(class="form-group")
-      label(for="title") Tiêu đề
-      input(
-        type="text"
-        class="form-control"
-        id="title"
-        name="title"
-        required
-      )
+      div(class="form-group")
+        label(for="title") Tiêu đề
+        input(
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          required
+        )
 
-    div(class="form-group")
-      label(for="project_category_id") Danh mục
-      select(
-        name="project_category_id"
-        id="project_category_id"
-        class="form-control"
-      )
-        option(value="") -- Chọn danh mục --
-        if(category)
-          +select-tree(category)
+      div(class="form-group")
+        label(for="project_category_id") Danh mục
+        select(
+          name="project_category_id"
+          id="project_category_id"
+          class="form-control"
+        )
+          option(value="") -- Chọn danh mục --
+          if(category)
+            +select-tree(category)
 
-    //- Chọn ảnh dùng multer
+      //- Chọn ảnh dùng multer
 
-    //- div(
-    //-   class="form-group"
-    //-   upload-image
-    //- )
-    //-   label(for="thumbnail") Ảnh
-    //-   input(
-    //-     type="file"
-    //-     class="form-control-file"
-    //-     id="thumbnail"
-    //-     name="thumbnail"
-    //-     accept="image/*"
-    //-     upload-image-input
-    //-   )
-    //-   img(
-    //-     src=""
-    //-     upload-image-preview
-    //-     class="image-preview"
-    //-   )
+      //- div(
+      //-   class="form-group"
+      //-   upload-image
+      //- )
+      //-   label(for="thumbnail") Ảnh
+      //-   input(
+      //-     type="file"
+      //-     class="form-control-file"
+      //-     id="thumbnail"
+      //-     name="thumbnail"
+      //-     accept="image/*"
+      //-     upload-image-input
+      //-   )
+      //-   img(
+      //-     src=""
+      //-     upload-image-preview
+      //-     class="image-preview"
+      //-   )
 
-    div(class="form-group")
-      label(for="desc") Mô tả
-      textarea(
-        class="form-control textarea-mce"
-        id="desc"
-        name="description"
-        rows="5"
-      )
+      div(class="form-group")
+        label(for="desc") Mô tả
+        textarea(
+          class="form-control textarea-mce"
+          id="desc"
+          name="description"
+          rows="5"
+        )
 
-    div(class="form-group")
-      label Ngân sách
-      .row
-        .col-md-6
-          label(for="budget-min") Tối thiểu
-          input(
-            type="number"
-            class="form-control"
-            id="budget-min"
-            name="budgetMin"
-            min="0"
-            value="0"
-          )
-        .col-md-6
-          label(for="budget-max") Tối đa
-          input(
-            type="number"
-            class="form-control"
-            id="budget-max"
-            name="budgetMax"
-            min="0"
-            value="0"
-          )
+      div(class="form-group")
+        label Ngân sách
+        .row
+          .col-md-6
+            label(for="budget-min") Tối thiểu
+            input(
+              type="number"
+              class="form-control"
+              id="budget-min"
+              name="budgetMin"
+              min="0"
+              value="0"
+            )
+          .col-md-6
+            label(for="budget-max") Tối đa
+            input(
+              type="number"
+              class="form-control"
+              id="budget-max"
+              name="budgetMax"
+              min="0"
+              value="0"
+            )
 
-    div(class="form-group")
-      label(for="deadline") Hạn chào giá
-      input(
-        type="date"
-        class="form-control"
-        id="deadline"
-        name="deadline"
-      )
+      div(class="form-group")
+        label(for="deadline") Hạn chào giá
+        input(
+          type="date"
+          class="form-control"
+          id="deadline"
+          name="deadline"
+        )
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusOPEN"
-        name="status"
-        value="OPEN"
-        checked
-      )
-      label(for="statusOPEN" class="form-check-label") Đang mở
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusOPEN"
+          name="status"
+          value="OPEN"
+          checked
+        )
+        label(for="statusOPEN" class="form-check-label") Đang mở
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusIn_progress"
-        name="status"
-        value="IN_PROGRESS"
-      )
-      label(for="statusIn_progress" class="form-check-label") Đang thực hiện
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusIn_progress"
+          name="status"
+          value="IN_PROGRESS"
+        )
+        label(for="statusIn_progress" class="form-check-label") Đang thực hiện
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusClosed"
-        name="status"
-        value="CLOSED"
-      )
-      label(for="statusClosed" class="form-check-label") Hoàn thành
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusClosed"
+          name="status"
+          value="CLOSED"
+        )
+        label(for="statusClosed" class="form-check-label") Hoàn thành
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusCancelled"
-        name="status"
-        value="CANCELLED"
-      )
-      label(for="statusCancelled" class="form-check-label") Hủy
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusCancelled"
+          name="status"
+          value="CANCELLED"
+        )
+        label(for="statusCancelled" class="form-check-label") Hủy
 
-    div(class="form-group")
-      label(for="position") Vị trí
-      input(
-        type="number"
-        class="form-control"
-        id="position"
-        name="position"
-        placeholder="Tự động tăng"
-        min="1"
-      )
+      div(class="form-group")
+        label(for="position") Vị trí
+        input(
+          type="number"
+          class="form-control"
+          id="position"
+          name="position"
+          placeholder="Tự động tăng"
+          min="1"
+        )
 
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Tạo mới
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Tạo mới
 
-  script(src="/admin/js/project.js")
+    script(src="/admin/js/project.js")
 

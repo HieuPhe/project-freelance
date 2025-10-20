@@ -7,58 +7,61 @@ include  ../../mixins/pagination.pug
 
 
 block main
-  h1 Danh mục công việc
+  if(role.permissions.includes("project-category_view"))
+    h1 Danh mục công việc
 
-  .card.mb-3
-  .card-header Tìm kiếm
-    .card-body
-      .row 
-        .col-4
-          +sort-category()
-        .col-6
-          +search(keyword)
-
-  .card.mb-3
-    .card-header Danh sách
+    .card.mb-3
+    .card-header Tìm kiếm
       .card-body
-        .row  
-          .col-8 
-          .col-4 
-            a(
-              href=`${prefixAdmin}/projects-category/create`
-              class="btn btn-outline-primary"
-            ) + Thêm mới
-  
-        table(
-          class = "table table-hover table-sm"
-          checkbox-multi
-        )
-          thead
-            tr
-              th 
-                input(type="checkbox" name="checkall")
-              th STT
-              th Hình ảnh
-              th Tiêu đề
-              th Vị trí
-              th Trạng thái
-              th Hành động
+        .row 
+          .col-4
+            +sort-category()
+          .col-6
+            +search(keyword)
 
-          tbody
-            +table-tree(records)
+    .card.mb-3
+      .card-header Danh sách
+        .card-body
+          .row  
+            .col-8 
+            .col-4
+              if(role.permissions.includes("project-category_create"))
+                a(
+                  href=`${prefixAdmin}/projects-category/create`
+                  class="btn btn-outline-primary"
+                ) + Thêm mới
+    
+          table(
+            class = "table table-hover table-sm"
+            checkbox-multi
+          )
+            thead
+              tr
+                th 
+                  input(type="checkbox" name="checkall")
+                th STT
+                th Hình ảnh
+                th Tiêu đề
+                th Vị trí
+                th Trạng thái
+                th Hành động
 
-  +pagination(pagination)
+            tbody
+              +table-tree(records)
+
+    +pagination(pagination)
 
 
-  form(
-    action=""
-    method="POST"
-    id="form-delete-item"
-    data-path=`${prefixAdmin}/projects-category/delete`
-  )
+    form(
+      action=""
+      method="POST"
+      id="form-delete-item"
+      data-path=`${prefixAdmin}/projects-category/delete`
+    )
 
-  script(src="/admin/js/project-category.js")          
-
+    script(src="/admin/js/project-category.js")          
+  else 
+    h1 Bạn không có quyền truy cập
   //- _id
   //- title 
   //- description 
