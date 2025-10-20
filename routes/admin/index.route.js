@@ -5,6 +5,7 @@ const projectRoute = require("./project.route");
 const projectCategoryRoute = require("./project-category.route");
 const roleRoute = require("./role.route");
 const accountRoute = require("./account.route");
+const authRoute = require("./auth.route");
 
 
 module.exports = (app) => {
@@ -19,4 +20,6 @@ module.exports = (app) => {
   app.use(PATH_ADMIN + "/roles", roleRoute);
 
   app.use(PATH_ADMIN + "/accounts", accountRoute);
+
+  app.use(PATH_ADMIN + "/auth", authRoute);
 };
