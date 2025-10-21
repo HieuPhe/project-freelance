@@ -1,5 +1,6 @@
 const Project = require("../../models/project.model");
 const ProjectCategory = require("../../models/project-category.model");
+const Account = require("../../models/account.model.js");
 
 const systemConfig = require("../../config/system.js");
 
@@ -54,6 +55,16 @@ module.exports.index = async (req, res) => {
     .sort(sort)
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
+
+  for (const project of projects) {
+    const user = await Account.findOne({
+      _id : project.createdBy.account_id
+    });
+
+    if(user) {
+      project.accountFullName = user.fullName;
+    }
+  }
 
   res.render("admin/pages/projects/index", {
     pageTitle: "Danh sách công việc",
@@ -177,6 +188,10 @@ module.exports.createPost = async (req, res) => {
   } else {
     req.body.position = parseInt(req.body.position);
   }
+
+  req.body.createdBy = {
+    account_id: res.locals.user.id,
+  };
 
   // Lưu vào database
   const project = new Project(req.body);

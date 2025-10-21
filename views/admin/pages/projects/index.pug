@@ -6,6 +6,7 @@ include  ../../mixins/pagination.pug
 include  ../../mixins/formChangeMulti.pug
 include  ../../mixins/alert.pug
 include  ../../mixins/sort.pug
+include  ../../mixins/moment.pug
 
 block main
   if(role.permissions.includes("project_view"))
@@ -60,6 +61,7 @@ block main
               th Ngân sách
               th Vị trí
               th Trạng thái
+              th Người tạo
               th Hành động
           tbody
             each item, index in projects
@@ -90,6 +92,10 @@ block main
                     span(class="badge badge-success") Hoàn thành
                   if(item.status == "CANCELLED")
                     span(class="badge badge-danger") Hủy
+
+                td 
+                  p #{item.accountFullName}
+                  +formatDate(item.createdBy.createdAt)
                 td
                   a(
                     href=`${prefixAdmin}/projects/detail/${item.id}`
