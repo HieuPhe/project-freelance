@@ -58,10 +58,10 @@ module.exports.index = async (req, res) => {
 
   for (const project of projects) {
     const user = await Account.findOne({
-      _id : project.createdBy.account_id
+      _id: project.createdBy.account_id,
     });
 
-    if(user) {
+    if (user) {
       project.accountFullName = user.fullName;
     }
   }
@@ -116,7 +116,13 @@ module.exports.changeMulti = async (req, res) => {
     case "delete-all":
       await Project.updateMany(
         { _id: { $in: ids } },
-        { deleted: true, deleteAt: new Date() }
+        {
+          deleted: true,
+          deletedBy: {
+            account_id: res.locals.user.id,
+            deletedAt: new Date(),
+          },
+        }
       );
       req.flash("success", `Đã xóa thành công ${ids.length} công việc!`);
       break;
@@ -148,7 +154,10 @@ module.exports.deleteItem = async (req, res) => {
     { _id: id },
     {
       deleted: true,
-      deleteAt: new Date(),
+      deletedBy: {
+        account_id: res.locals.user.id,
+        deletedAt: new Date(),
+      },
     }
   );
 
