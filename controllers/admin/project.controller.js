@@ -57,12 +57,22 @@ module.exports.index = async (req, res) => {
     .skip(objectPagination.skip);
 
   for (const project of projects) {
+    // Lấy ra thông tin người tạo
     const user = await Account.findOne({
       _id: project.createdBy.account_id,
     });
 
     if (user) {
       project.accountFullName = user.fullName;
+    }
+
+    // Lấy ra thông tin người cập nhật gần nhất
+    const updatedBy = project.updatedBy.slice(-1)[0];
+    if (updatedBy) {
+      const userUpdate = await Account.findOne({
+        _id: updatedBy.account_id,
+      });
+      updatedBy.accountFullName = userUpdate.fullName;
     }
   }
 
@@ -81,9 +91,20 @@ module.exports.changeMulti = async (req, res) => {
   const type = req.body.type;
   const ids = req.body.ids.split(", ");
 
+  const updatedBy = {
+    account_id: res.locals.user.id,
+    updatedAt: new Date(),
+  };
+
   switch (type) {
     case "OPEN":
-      await Project.updateMany({ _id: { $in: ids } }, { status: "OPEN" });
+      await Project.updateMany(
+        { _id: { $in: ids } },
+        {
+          status: "OPEN",
+          $push: { updatedBy: updatedBy },
+        }
+      );
       req.flash(
         "success",
         `Cập nhật trạng thái thành công ${ids.length} công việc!`
@@ -92,7 +113,10 @@ module.exports.changeMulti = async (req, res) => {
     case "IN_PROGRESS":
       await Project.updateMany(
         { _id: { $in: ids } },
-        { status: "IN_PROGRESS" }
+        {
+          status: "IN_PROGRESS",
+          $push: { updatedBy: updatedBy },
+        }
       );
       req.flash(
         "success",
@@ -100,14 +124,26 @@ module.exports.changeMulti = async (req, res) => {
       );
       break;
     case "CLOSED":
-      await Project.updateMany({ _id: { $in: ids } }, { status: "CLOSED" });
+      await Project.updateMany(
+        { _id: { $in: ids } },
+        {
+          status: "CLOSED",
+          $push: { updatedBy: updatedBy },
+        }
+      );
       req.flash(
         "success",
         `Cập nhật trạng thái thành công ${ids.length} công việc!`
       );
       break;
     case "CANCELLED":
-      await Project.updateMany({ _id: { $in: ids } }, { status: "CANCELLED" });
+      await Project.updateMany(
+        { _id: { $in: ids } },
+        {
+          status: "CANCELLED",
+          $push: { updatedBy: updatedBy },
+        }
+      );
       req.flash(
         "success",
         `Cập nhật trạng thái thành công ${ids.length} công việc!`
@@ -131,7 +167,13 @@ module.exports.changeMulti = async (req, res) => {
         let [id, position] = item.split("-");
         position = parseInt(position);
 
-        await Project.updateOne({ _id: id }, { position: position });
+        await Project.updateOne(
+          { _id: id },
+          {
+            position: position,
+            $push: { updatedBy: updatedBy },
+          }
+        );
 
         req.flash("success", `Đổi vị trí thành công ${ids.length} công việc!`);
       }
@@ -254,7 +296,18 @@ module.exports.editPatch = async (req, res) => {
 
   // Lưu vào database
   try {
-    await Project.updateOne({ _id: id }, req.body);
+    const updatedBy = {
+      account_id: res.locals.user.id,
+      updatedAt: new Date(),
+    };
+
+    await Project.updateOne(
+      { _id: id },
+      {
+        ...req.body,
+        $push: { updatedBy: updatedBy },
+      }
+    );
     req.flash("success", `Cập nhật thành công!`);
   } catch (error) {
     req.flash("error", `Cập nhật thất bại!`);

@@ -3,3 +3,6 @@ mixin formatDate(time)
 
 mixin formatTime(time)
   span #{moment(time).startOf('day').fromNow()}
+
+mixin formatDateTime(time)
+  span #{moment().format('DD/MM/YYYY, hh:mm:ss a')}
