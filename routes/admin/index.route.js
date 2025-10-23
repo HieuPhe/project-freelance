@@ -8,6 +8,7 @@ const projectCategoryRoute = require("./project-category.route");
 const roleRoute = require("./role.route");
 const accountRoute = require("./account.route");
 const authRoute = require("./auth.route");
+const myAccountRoute = require("./my-account.route");
 
 module.exports = (app) => {
   const PATH_ADMIN = systemConfig.prefixAdmin;
@@ -18,11 +19,7 @@ module.exports = (app) => {
     dashboardRoute
   );
 
-  app.use(
-  PATH_ADMIN + "/projects",
-  authMiddleware.requireAuth,
-  projectRoute
-  );
+  app.use(PATH_ADMIN + "/projects", authMiddleware.requireAuth, projectRoute);
 
   app.use(
     PATH_ADMIN + "/projects-category",
@@ -30,17 +27,11 @@ module.exports = (app) => {
     projectCategoryRoute
   );
 
-  app.use(
-  PATH_ADMIN + "/roles", 
-  authMiddleware.requireAuth, 
-  roleRoute
-  );
+  app.use(PATH_ADMIN + "/roles", authMiddleware.requireAuth, roleRoute);
 
-  app.use(
-  PATH_ADMIN + "/accounts", 
-  authMiddleware.requireAuth, 
-  accountRoute 
-  );
+  app.use(PATH_ADMIN + "/accounts", authMiddleware.requireAuth, accountRoute);
 
   app.use(PATH_ADMIN + "/auth", authRoute);
+
+  app.use(PATH_ADMIN + "/my-account", authMiddleware.requireAuth, myAccountRoute);
 };
