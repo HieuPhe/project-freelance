@@ -5,7 +5,9 @@ const controller = require("../../controllers/client/project.controller");
 
 router.get("/", controller.index);
 
-router.get("/:slug", controller.detail);
+router.get("/:slugCategory", controller.category);
+
+// router.get("/:slug", controller.detail);
 
 
 module.exports = router;
