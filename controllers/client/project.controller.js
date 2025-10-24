@@ -24,8 +24,6 @@ module.exports.detail = async (req, res) => {
 
     const project = await Project.findOne(find);
 
-    console.log(project);
-
     res.render("client/pages/projects/detail", {
       pageTitle: project.title,
       project: project,

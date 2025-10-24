@@ -21,6 +21,7 @@ const projectSchema = new mongoose.Schema(
       enum: ["OPEN", "IN_PROGRESS", "CLOSED", "CANCELLED"],
       default: "OPEN",
     },
+    featured: String,
     position: Number,
     slug: {
       type: String,

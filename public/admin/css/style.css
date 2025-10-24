@@ -14,6 +14,7 @@
 }
 /* End Header */
 
+
 /* Body */
 .body .sider {
   width: 150px;
@@ -73,7 +74,6 @@
 [show-alert].alert-warning {
   background: linear-gradient(135deg, #ffe082, #ffb300);
 }
-
 
 [show-alert] [close-alert] {
   position: absolute;

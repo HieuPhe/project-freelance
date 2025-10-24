@@ -24,6 +24,170 @@
 
 /* End Header */
 
+/* ================================
+   CỐT LÕI – KHÔNG BỊ CẮT & KHÔNG MẤT HOVER
+=================================== */
+.category-bar,
+.category-bar .container,
+.category-bar .row,
+.category-nav,
+.category-nav > .category-list,
+.category-nav > .category-list > li {
+  position: relative;
+  overflow: visible;
+}
+
+/* Toàn bộ khối danh mục */
+.category-nav {
+  font-size: 14px;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== DANH MỤC GỐC BÊN TRÁI ===== */
+.category-nav > .category-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  width: 300px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+}
+
+/* Item cấp gốc */
+.category-nav > .category-list > li {
+  position: relative;
+}
+.category-nav > .category-list > li > a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  line-height: 1.5;
+  text-decoration: none;
+  color: #111827;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.category-nav > .category-list > li:last-child > a {
+  border-bottom: none;
+}
+
+.category-nav > .category-list > li > a:hover {
+  background: #f9fafb;
+  color: #0b6b3a;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+/* Trạng thái đang chọn */
+.category-nav > .category-list > li.active > a,
+.category-nav li.is-active > a {
+  background: #f0fdf4;
+  color: #16a34a;
+  font-weight: 600;
+}
+
+/* ===== MŨI TÊN CHỈ DANH MỤC CON ===== */
+.category-nav li.has-children > a {
+  position: relative;
+  padding-right: 16px; /* bỏ vùng tím dư */
+}
+.category-nav li.has-children > a::after {
+  content: "›";
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 15px;
+  opacity: 0.7;
+  pointer-events: none; /* không còn vùng hover riêng */
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+.category-nav li.has-children:hover > a::after {
+  transform: translateY(-50%) translateX(2px);
+  color: #16a34a;
+}
+
+/* ===== SUBMENU CON – RỘNG THOÁNG, ỔN ĐỊNH ===== */
+.category-nav .submenu .submenu {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+
+  position: absolute;
+  top: -6px;
+  left: 100%;
+  margin-left: -29px; /* overlap mượt, không cầu nối */
+  padding-left: 16px;
+  background-clip: padding-box;
+  box-sizing: content-box;
+
+  min-width: 340px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+  z-index: 999;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(8px);
+  transition: opacity 0.16s ease, transform 0.16s ease,
+    visibility 0s linear 0.16s;
+  pointer-events: none;
+}
+
+/* Hiển thị submenu khi hover hoặc focus */
+.category-nav .submenu > li:hover > .submenu,
+.category-nav .submenu > li > a:hover + .submenu,
+.category-nav .submenu > li > a:focus + .submenu,
+.category-nav .submenu > li > .submenu:hover,
+.category-nav .submenu > li:focus-within > .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0s;
+  pointer-events: auto;
+}
+
+/* Item trong submenu */
+.category-nav .submenu .submenu li {
+  position: relative;
+}
+.category-nav .submenu .submenu li a {
+  display: block;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: #111827;
+  border-bottom: 1px solid #f3f4f6;
+  line-height: 1.5;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.category-nav .submenu .submenu li:last-child a {
+  border-bottom: none;
+}
+.category-nav .submenu .submenu li a:hover {
+  background: #f9fafb;
+  color: #16a34a;
+}
+
+/* Focus ring cho bàn phím */
+.category-nav a:focus {
+  outline: 2px solid rgba(22, 163, 74, 0.35);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
 /* Footer */
 .footer {
   background: #333;
@@ -60,7 +224,7 @@
 }
 .project-card:hover {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid hsl(216 77% 50%); 
+  border: 1px solid hsl(216 77% 50%);
 }
 
 .project-center {
@@ -75,7 +239,7 @@
 }
 .project-description {
   font-size: 13px;
-  color: #6b7280; 
+  color: #6b7280;
   text-transform: uppercase;
   margin: 0 0 8px;
   letter-spacing: 0.3px;
@@ -99,7 +263,7 @@
   margin-left: 12px;
 }
 .project-fav {
-  border: 1px solid hsl(216 77% 50%); 
+  border: 1px solid hsl(216 77% 50%);
   border-radius: 10%;
   background: transparent;
   color: hsl(216 77% 50%);

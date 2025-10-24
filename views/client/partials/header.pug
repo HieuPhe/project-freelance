@@ -1,3 +1,5 @@
+include ../mixins/sub-menu.pug
+
 header.header
   .container
     .row.align-items-center 
@@ -13,4 +15,15 @@ header.header
               a(href="/") Trang chủ
             li 
               a(href="/projects") Công việc
-        
+
+section.category-bar
+  .container
+    .row
+      .col-3
+        nav.category-nav(aria-label="Danh mục việc làm")
+          - const pathProject = "/projects";
+          +sub-menu-1(layoutProjectCategory, pathProject, 0)
+      .col-9
+
+
+
