@@ -6,13 +6,18 @@ module.exports.index = async (req, res) => {
   const projectsFeatured = await Project.find({
     featured: "1",
     deleted: false,
-    status: "OPEN"
+    status: "OPEN",
   }).limit(4);
 
-  
+  // Lấy ra cv mới nhất
+  const projectsNew = await Project.find({
+    deleted: false,
+    status: "OPEN"
+  }).sort({ position: "desc" }).limit(4);
 
   res.render("client/pages/home/index", {
     pageTitle: "Trang chủ",
-    projectsFeatured: projectsFeatured
+    projectsFeatured: projectsFeatured,
+    projectsNew: projectsNew
   });
 };
