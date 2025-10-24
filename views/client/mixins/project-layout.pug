@@ -1,0 +1,6 @@
+include project-item.pug
+
+mixin project-grid(projects)
+   .row
+    each item in projects 
+      +project-item(item)

@@ -1,4 +1,14 @@
 extends ../../layouts/default.pug
 
+include ../../mixins/box-head.pug
+include ../../mixins/project-layout.pug
+
 block main
-  h1 Trang chủ
+
+  .section-project-featured.my-5
+    .container.my-3
+      .row
+        .col-12
+          +box-head("Công việc nổi bật")
+
+      +project-grid(projectsFeatured)

@@ -221,6 +221,7 @@
   padding: 16px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.2s ease;
+  position: relative;
 }
 .project-card:hover {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
@@ -237,6 +238,19 @@
   color: #111827; /* gray-900 */
   margin: 0 0 4px;
 }
+
+.project-card .inner-featured {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #1d6ce2;
+  color: white;
+  padding: 3px 6px;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
 .project-description {
   font-size: 13px;
   color: #6b7280;
