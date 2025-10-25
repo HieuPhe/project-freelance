@@ -2,13 +2,17 @@ mixin project-item(item)
   .col-12.mb-3
     .project-card
       .project-center
-        h3.project-title 
-          a(href=`/projects/${item.slug}`) #{item.title} 
+        h3.project-title
+          a(href=`/projects/detail/${item.slug}`)= item.title
           if (item.featured == "1")
             .inner-featured Nổi bật
-        p.project-description !{item.description}
+
+        // giữ !{} đúng yêu cầu
+        .project-description !{item.description}
+
         .project-tags
           span.project-pill #{item.budget.min} - #{item.budget.max} VNĐ
           span.project-pill #{item.deadline ? `${new Date(item.deadline).getDate().toString().padStart(2,'0')}/${(new Date(item.deadline).getMonth()+1).toString().padStart(2,'0')}/${new Date(item.deadline).getFullYear()}` : ''}
+
       .project-right
-        button.project-fav Chi tiết
+        button.project-fav(type="button") Chi tiết

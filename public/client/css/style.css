@@ -229,7 +229,8 @@
 }
 
 .project-center {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
   margin-left: 16px;
 }
 .project-title a {
@@ -257,6 +258,20 @@
   text-transform: uppercase;
   margin: 0 0 8px;
   letter-spacing: 0.3px;
+
+  display: block;
+  width: 60%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Ép mọi phần tử con (p, div, br, span, …) thành inline để ellipsis chạy */
+.project-description * {
+  display: inline !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .project-tags {
@@ -307,3 +322,235 @@
 }
 
 /* END Project card */
+
+/* ===================== project-detail ===================== */
+
+.project-detail {
+  font-family: "Segoe UI", sans-serif;
+  padding: 40px 0;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* ----- Thông tin dự án ----- */
+.project-detail .inner-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 20px;
+}
+
+.project-detail .inner-category {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.project-detail .inner-category span {
+  font-weight: 600;
+  color: #333;
+}
+
+.project-detail .inner-category a {
+  color: #1a73e8;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.project-detail .inner-category a:hover {
+  text-decoration: underline;
+}
+
+.project-detail .inner-budget {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.project-detail .inner-budget b {
+  color: green;
+  font-weight: 600;
+}
+
+.project-detail .inner-deadline {
+  font-size: 16px;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.project-detail .inner-deadline b {
+  color: #d32f2f;
+  font-weight: 600;
+}
+
+/* ----- Form đề xuất công việc ----- */
+.project-detail form {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 400px;
+  margin-top: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.project-detail form .form-control {
+  font-size: 15px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  text-align: center;
+}
+
+.project-detail form .form-control:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+}
+
+.project-detail form .btn-success {
+  font-weight: 600;
+  background-color: #1a73e8;
+  border: none;
+  color: #fff;
+  padding: 10px 0;
+  border-radius: 6px;
+  width: 100%;
+  transition: 0.2s ease;
+}
+
+.project-detail form .btn-success:hover {
+  background-color: #1557b0;
+}
+
+/* ----- Phần mô tả sản phẩm ----- */
+.project-detail .box-head {
+  font-size: 22px;
+  font-weight: 700;
+  color: #222;
+  border-bottom: 2px solid #1a73e8;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.project-detail .box-head::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 80px;
+  height: 2px;
+  background-color: #1a73e8;
+}
+
+.project-detail .inner-desc {
+  background: #fafafa;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  font-size: 15px;
+  color: #444;
+  line-height: 1.7;
+}
+
+.project-detail .inner-desc p {
+  margin-bottom: 10px;
+}
+
+.project-detail .inner-desc ul {
+  list-style: disc;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+/* Khoảng cách giữa các phần */
+.project-detail .col-12 > div {
+  margin-bottom: 12px;
+}
+
+/* ===================== End project-detail ===================== */
+
+/* Khung modal */
+.modal-content {
+  border: 1px solid #e6e8eb;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+.modal-header {
+  border: 0;
+  padding: 16px 20px 0;
+}
+.modal-title {
+  color: #1a73e8;
+  font-weight: 700;
+}
+.modal-body {
+  padding: 16px 20px 8px;
+}
+.modal-footer {
+  border: 0;
+  padding: 8px 20px 20px;
+}
+.modal-body::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: #eef0f2;
+  margin: 12px -20px 0;
+}
+
+/* Form & input */
+.form-group {
+  margin-bottom: 16px;
+}
+.form-group label {
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 6px;
+}
+.form-control {
+  height: 42px;
+  border: 1px solid #dfe3e8;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+.form-control:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.15);
+}
+
+/* Ô chọn file (giữ nguyên input[type=file]) */
+input[type="file"].form-control {
+  height: auto;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+}
+input[type="file"].form-control::-webkit-file-upload-button,
+input[type="file"].form-control::file-selector-button {
+  border: 1px solid #d1d5db;
+  background: #f3f4f6;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  margin-right: 0.6rem;
+  cursor: pointer;
+}
+input[type="file"].form-control:hover::-webkit-file-upload-button,
+input[type="file"].form-control:hover::file-selector-button {
+  background: #e5e7eb;
+}
+
+/* Nút hành động */
+.btn-primary {
+  background: #1a73e8;
+  border-color: #1a73e8;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+}
+.btn-primary:hover {
+  filter: brightness(0.95);
+}
+.btn-outline-secondary {
+  border-radius: 8px;
+  font-weight: 600;
+}

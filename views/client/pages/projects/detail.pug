@@ -1,26 +1,85 @@
 extends ../../layouts/default 
 
-block main 
-  .container.my-3 
-    .row 
-      .col-12 
-        if (project.title)
-          h1(class="mb-4") #{project.title}
+include ../../mixins/box-head.pug
+block main
+  .project-detail
+    .container.my-5
+      .row 
+        //- .col-6 
+        .col-12 
+          if (project.title)
+            h1(class="inner-title") #{project.title}
 
-        if (project.budget)
-          div(class="mb-4") Ngân sách: <b>#{project.budget.min} - #{project.budget.max} VNĐ</b>
+          if (project.category)
+            div(class="inner-category")
+              span Danh mục: 
+                a(href=`projects/${project.category.slug}`) #{project.category.title}
 
-        if (project.deadline)
-          - const d = new Date(project.deadline);
-          - const formattedDate = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
-          div(class="mb-4") Hạn chào giá: <b>#{formattedDate}</b>
+          if (project.budget)
+            div(class="inner-budget") Ngân sách: <b>#{project.budget.min} - #{project.budget.max} VNĐ</b>
 
-        //- if (project.thumbnail)
-        //-   div(class="mb-4")
-        //-     img(
-        //-       src=project.thumbnail
-        //-       style="width: 100px"
-        //-     )
+          if (project.deadline)
+            - const d = new Date(project.deadline);
+            - const formattedDate = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+            div(class="inner-deadline") Hạn chào giá: <b>#{formattedDate}</b>
 
-        if (project.description)
-          div(class="mb-4") Mô tả: !{project.description}
+          //- form(
+          //-   action=`/proposal/add/${project.id}`
+          //-   method="POST"
+          //- )
+          //-   button(
+          //-     type="submit"
+          //-     class="btn btn-success btn-block"
+          //-   ) Đề xuất công việc
+
+          //- Nút mở modal
+          button.btn.btn-primary(type="button" data-toggle="modal" data-target="#applyModal")
+            | Ứng tuyển
+
+          //- Modal có form gửi dữ liệu
+          .modal.fade#applyModal(tabindex="-1" role="dialog")
+            .modal-dialog.modal-dialog-centered(role="document")
+              .modal-content
+                .modal-header
+                  h5.modal-title.text-primary.font-weight-bold Ứng tuyển vào vị trí
+                  button.close(type="button" data-dismiss="modal" aria-label="Đóng")
+                    span(aria-hidden="true") ×
+
+                //- Form bắt đầu từ đây
+                form(
+                  action=`/proposal/add/${project.id}`
+                  enctype="multipart/form-data" 
+                  method="POST")
+                  .modal-body
+                    input(type="hidden" name="project" value=project.id)
+
+                    .form-group
+                      label(for="fullname") Họ và tên
+                      input#fullname.form-control(type="text" name="fullname" )
+
+                    .form-group
+                      label(for="email") Email
+                      input#email.form-control(type="email" name="email" )
+
+                    .form-group
+                      label(for="phone") Số điện thoại
+                      input#phone.form-control(type="tel" name="phone" )
+
+                    .form-group
+                      label(for="quantity") Gửi hồ sơ
+                      input.form-control.mb-2(
+                         type="file"
+                          name="uploadFile"
+                          accept=".pdf,.doc,.docx,.jpg,.png"
+                      )
+
+                  .modal-footer
+                    button.btn.btn-outline-secondary(type="button" data-dismiss="modal") HỦY
+                    button.btn.btn-primary(type="submit") GỬI HỒ SƠ
+
+
+    .container.my-5
+      .row
+        .col-12
+          +box-head("Mô tả công việc")
+          .inner-desc !{project.description}
