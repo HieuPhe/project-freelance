@@ -1,6 +1,8 @@
 extends ../../layouts/default 
 
 include ../../mixins/box-head.pug
+include ../../mixins/project-layout.pug
+
 block main
   .project-detail
     .container.my-5
@@ -41,7 +43,7 @@ block main
             .modal-dialog.modal-dialog-centered(role="document")
               .modal-content
                 .modal-header
-                  h5.modal-title.text-primary.font-weight-bold Ứng tuyển vào vị trí
+                  h5.modal-title.text-primary.font-weight-bold Ứng tuyển 
                   button.close(type="button" data-dismiss="modal" aria-label="Đóng")
                     span(aria-hidden="true") ×
 
@@ -83,3 +85,12 @@ block main
         .col-12
           +box-head("Mô tả công việc")
           .inner-desc !{project.description}
+
+
+    
+    .container.my-3
+      .row
+        .col-12
+          +box-head("Công việc mới")
+
+      +project-grid(projectsNew)

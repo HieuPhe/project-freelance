@@ -1,0 +1,15 @@
+extends ../../layouts/default.pug
+
+include ../../mixins/box-head.pug
+include ../../mixins/project-layout.pug
+
+block main
+  .container.my-3
+    .row
+      .col-12
+        +box-head("Kết quả tìm kiếm")
+
+    if(projects.length > 0)
+      +project-grid(projects)
+    else 
+      h3(class="text-center") Không tìm thấy sản phẩm nào

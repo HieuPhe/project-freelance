@@ -31,15 +31,23 @@ module.exports.detail = async (req, res) => {
       const category = await ProjectCategory.findOne({
         _id: project.project_category_id,
         status: "active",
-        deleted: false
+        deleted: false,
       });
 
       project.category = category;
     }
 
+    const projectsNew = await Project.find({
+      deleted: false,
+      status: "OPEN",
+    })
+      .sort({ position: "desc" })
+      .limit(4);
+
     res.render("client/pages/projects/detail", {
       pageTitle: project.title,
       project: project,
+      projectsNew: projectsNew
     });
   } catch (error) {
     req.flash("error", `Không tồn tại công việc này!`);

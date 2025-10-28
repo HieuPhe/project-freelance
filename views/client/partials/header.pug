@@ -1,5 +1,3 @@
-include ../mixins/sub-menu.pug
-
 header.header
   .container
     .row.align-items-center 
@@ -16,14 +14,23 @@ header.header
             li 
               a(href="/projects") Công việc
 
-section.category-bar
+.section-search
   .container
-    .row
-      .col-3
-        nav.category-nav(aria-label="Danh mục việc làm")
-          - const pathProject = "/projects";
-          +sub-menu-1(layoutProjectCategory, pathProject, 0)
-      .col-9
+    form(
+      action="/search" 
+      method="GET" 
+      class="search-form"
+    )
+      .form-group
+        input(
+          type="text"
+          placeholder="Nhập từ khóa..."
+          class="form-control search-input"
+          name="keyword"
+          value=keyword
+        )
+        button(type="submit" class="btn btn-primary search-btn") Tìm
+
 
 
 

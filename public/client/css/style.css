@@ -554,3 +554,82 @@ input[type="file"].form-control:hover::file-selector-button {
   border-radius: 8px;
   font-weight: 600;
 }
+
+/* thanh tìm kiếm */
+/* Khối chứa form ngay dưới header (giữ nếu bạn đã có) */
+.section-search {
+  padding: 24px 0;
+  background: transparent;
+}
+
+/* Form layout */
+.section-search .search-form {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Vỏ input dạng “viên thuốc” */
+.section-search .form-group {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 2px solid #e6edf5;
+  border-radius: 999px;
+  padding: 10px 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  transition: 0.25s ease;
+}
+
+/* Hiệu ứng khi focus */
+.section-search .form-group:focus-within {
+  border-color: #1d6ce2;
+  box-shadow: 0 0 0 6px rgba(16, 75, 185, 0.15), 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* Input – bỏ viền, nền trong suốt, font lớn hơn */
+.section-search .form-control,
+.section-search .search-input {
+  flex: 1;
+  height: 46px;
+  border: 0 !important;
+  outline: 0;
+  background: transparent;
+  box-shadow: none !important;
+  font-size: 16px;
+  padding: 0 8px;
+}
+
+.section-search .form-control::placeholder,
+.section-search .search-input::placeholder {
+  color: #98a2b3;
+}
+
+/* Nút tìm – bo tròn, màu xanh lá giống mẫu */
+.section-search .btn,
+.section-search .search-btn {
+  height: 46px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: #1d6ce2; /* xanh lá */
+  color: #fff;
+  font-weight: 600;
+  line-height: 46px;
+  box-shadow: 0 6px 18px rgba(16, 75, 185, 0.15);
+  transition: 0.2s ease;
+}
+
+.section-search .btn:hover,
+.section-search .search-btn:hover {
+  filter: brightness(0.95);
+  transform: translateY(-1px);
+}
+
+.section-search .btn:active,
+.section-search .search-btn:active {
+  transform: translateY(0);
+}

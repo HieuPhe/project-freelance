@@ -2,8 +2,18 @@ extends ../../layouts/default.pug
 
 include ../../mixins/box-head.pug
 include ../../mixins/project-layout.pug
+include ../../mixins/sub-menu.pug
 
 block main
+ 
+  .section.category-bar
+    .container
+      .row
+        .col-3
+          nav.category-nav(aria-label="Danh mục việc làm")
+            - const pathProject = "/projects";
+            +sub-menu-1(layoutProjectCategory, pathProject, 0)
+        .col-9
 
   .section-project-featured.my-5
     .container.my-3
