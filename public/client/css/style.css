@@ -1,6 +1,7 @@
 .header {
   border-bottom: 1px solid #ddd;
   padding: 10px 0;
+  background-color: #124c99;
 }
 
 .header .inner-logo img {
@@ -22,172 +23,277 @@
   margin-left: 20px;
 }
 
+.header .inner-menu > ul > li > a {
+  color: white;
+}
+
+.header .inner-menu > ul > li > a:hover {
+  text-decoration: none;
+  color: #1d6ce2;
+}
+
 /* End Header */
 
-/* ================================
-   CỐT LÕI – KHÔNG BỊ CẮT & KHÔNG MẤT HOVER
-=================================== */
+/* =========================================
+   0) LAYERING & KHOẢNG CÁCH 2 CỘT
+   ========================================= */
 .category-bar,
 .category-bar .container,
 .category-bar .row,
-.category-nav,
-.category-nav > .category-list,
-.category-nav > .category-list > li {
+.category-nav {
+  overflow: visible !important;
+}
+.category-bar .col-3 {
   position: relative;
+  z-index: 1002;
+  padding-right: 0;
+}
+.category-bar .col-9 {
+  position: relative;
+  z-index: 1;
+  padding-left: 28px;
+}
+
+/* đường phân tách mảnh (tùy chọn) */
+@media (min-width: 992px) {
+  .category-bar .col-9::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: rgba(0, 0, 0, 0.06);
+  }
+}
+
+/* =========================================
+   1) BANNER / CAROUSEL
+   ========================================= */
+#carouselExampleControls {
+  border-radius: 14px;
+  overflow: hidden; /* ảnh không tràn bo góc */
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+}
+.category-bar .carousel-inner {
+  max-height: 340px;
+  overflow: hidden;
+}
+.category-bar .carousel-inner img {
+  display: block;
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+}
+/* tránh nút điều hướng đè ra ngoài bo góc */
+#carouselExampleControls .carousel-control-prev,
+#carouselExampleControls .carousel-control-next {
+  width: 7%;
+}
+
+/* =========================================
+   2) SIDEBAR DANH MỤC (root)
+   ========================================= */
+.category-nav ul,
+.category-nav li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.category-nav > .category-list,
+.category-nav > ul {
+  /* bắt cả ul không có class */
+  width: 280px;
+  background: #fff;
+  border: 1px solid #edf0f3;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+  padding: 6px 0;
   overflow: visible;
 }
 
-/* Toàn bộ khối danh mục */
-.category-nav {
-  font-size: 14px;
-  color: #111827;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* ===== DANH MỤC GỐC BÊN TRÁI ===== */
-.category-nav > .category-list {
-  list-style: none;
-  margin: 0;
-  padding: 8px 0;
-  width: 300px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
-}
-
-/* Item cấp gốc */
-.category-nav > .category-list > li {
+/* item gốc */
+.category-nav > .category-list > li,
+.category-nav > ul > li {
   position: relative;
 }
-.category-nav > .category-list > li > a {
+
+.category-nav > .category-list > li > a,
+.category-nav > ul > li > a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  padding: 14px 16px;
-  line-height: 1.5;
+  padding: 12px 16px;
+  gap: 8px;
+  color: #1f2937;
+  font-size: 14px;
   text-decoration: none;
-  color: #111827;
   border-bottom: 1px solid #f3f4f6;
-  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  transition: background 0.15s ease, color 0.15s ease;
 }
-.category-nav > .category-list > li:last-child > a {
-  border-bottom: none;
+.category-nav > .category-list > li:last-child > a,
+.category-nav > ul > li:last-child > a {
+  border-bottom: 0;
 }
-
-.category-nav > .category-list > li > a:hover {
+.category-nav > .category-list > li > a:hover,
+.category-nav > ul > li > a:hover {
   background: #f9fafb;
-  color: #0b6b3a;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+  color: #0d7e4c;
 }
 
-/* Trạng thái đang chọn */
-.category-nav > .category-list > li.active > a,
-.category-nav li.is-active > a {
-  background: #f0fdf4;
-  color: #16a34a;
-  font-weight: 600;
-}
-
-/* ===== MŨI TÊN CHỈ DANH MỤC CON ===== */
-.category-nav li.has-children > a {
+/* mũi tên – không chặn hover */
+.category-nav li > a {
   position: relative;
-  padding-right: 16px; /* bỏ vùng tím dư */
+  padding-right: 18px;
 }
-.category-nav li.has-children > a::after {
+.category-nav li > a::after {
   content: "›";
   position: absolute;
-  right: 6px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
   color: #9ca3af;
-  font-size: 15px;
-  opacity: 0.7;
-  pointer-events: none; /* không còn vùng hover riêng */
-  transition: transform 0.15s ease, color 0.15s ease;
-}
-.category-nav li.has-children:hover > a::after {
-  transform: translateY(-50%) translateX(2px);
-  color: #16a34a;
-}
-
-/* ===== SUBMENU CON – RỘNG THOÁNG, ỔN ĐỊNH ===== */
-.category-nav .submenu .submenu {
-  list-style: none;
-  margin: 0;
-  padding: 8px 0;
-
-  position: absolute;
-  top: -6px;
-  left: 100%;
-  margin-left: -29px; /* overlap mượt, không cầu nối */
-  padding-left: 16px;
-  background-clip: padding-box;
-  box-sizing: content-box;
-
-  min-width: 340px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
-  z-index: 999;
-
-  opacity: 0;
-  visibility: hidden;
-  transform: translateX(8px);
-  transition: opacity 0.16s ease, transform 0.16s ease,
-    visibility 0s linear 0.16s;
+  opacity: 0.8;
   pointer-events: none;
 }
 
-/* Hiển thị submenu khi hover hoặc focus */
-.category-nav .submenu > li:hover > .submenu,
-.category-nav .submenu > li > a:hover + .submenu,
-.category-nav .submenu > li > a:focus + .submenu,
-.category-nav .submenu > li > .submenu:hover,
-.category-nav .submenu > li:focus-within > .submenu {
+/* =========================================
+   3) SUBMENU CẤP 1 – BAY SANG PHẢI
+   ========================================= */
+.category-nav > .category-list > li > ul,
+.category-nav > .category-list > li > .submenu,
+.category-nav > ul > li > ul,
+.category-nav > ul > li > .submenu {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 10px); /* tách khỏi panel gốc */
+  min-width: 260px;
+  padding: 6px 0;
+  background: #fff;
+  border: 1px solid #edf0f3;
+  border-radius: 14px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+  z-index: 1003;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+  pointer-events: none;
+}
+
+/* hiện khi hover/focus vào li gốc */
+.category-nav > .category-list > li:hover > ul,
+.category-nav > .category-list > li:hover > .submenu,
+.category-nav > .category-list > li:focus-within > ul,
+.category-nav > .category-list > li:focus-within > .submenu,
+.category-nav > ul > li:hover > ul,
+.category-nav > ul > li:hover > .submenu,
+.category-nav > ul > li:focus-within > ul,
+.category-nav > ul > li:focus-within > .submenu {
   opacity: 1;
   visibility: visible;
-  transform: translateX(0);
-  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0s;
+  transform: translateY(0);
   pointer-events: auto;
 }
 
-/* Item trong submenu */
-.category-nav .submenu .submenu li {
-  position: relative;
-}
-.category-nav .submenu .submenu li a {
-  display: block;
-  padding: 12px 16px;
-  text-decoration: none;
-  color: #111827;
-  border-bottom: 1px solid #f3f4f6;
-  line-height: 1.5;
-  transition: background 0.15s ease, color 0.15s ease;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.category-nav .submenu .submenu li:last-child a {
-  border-bottom: none;
-}
-.category-nav .submenu .submenu li a:hover {
-  background: #f9fafb;
-  color: #16a34a;
+/* cầu hover chống rơi khi rê ngang giữa 2 panel */
+.category-nav > .category-list > li::after,
+.category-nav > ul > li::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 14px;
+  height: 100%;
 }
 
-/* Focus ring cho bàn phím */
-.category-nav a:focus {
-  outline: 2px solid rgba(22, 163, 74, 0.35);
-  outline-offset: 2px;
-  border-radius: 8px;
+/* item trong submenu */
+.category-nav > .category-list > li > ul > li > a,
+.category-nav > .category-list > li > .submenu > li > a,
+.category-nav > ul > li > ul > li > a,
+.category-nav > ul > li > .submenu > li > a {
+  display: block;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #111827;
+  text-decoration: none;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.15s ease, color 0.15s;
 }
+.category-nav > .category-list > li > ul > li:last-child > a,
+.category-nav > .category-list > li > .submenu > li:last-child > a,
+.category-nav > ul > li > ul > li:last-child > a,
+.category-nav > ul > li > .submenu > li:last-child > a {
+  border-bottom: 0;
+}
+.category-nav > .category-list > li > ul > li > a:hover,
+.category-nav > .category-list > li > .submenu > li > a:hover,
+.category-nav > ul > li > ul > li > a:hover,
+.category-nav > ul > li > .submenu > li > a:hover {
+  background: #f9fafb;
+  color: #0d7e4c;
+}
+
+/* =========================================
+   4) SUBMENU CẤP 2+ – TIẾP TỤC BAY SANG PHẢI
+   ========================================= */
+.category-nav ul ul > li {
+  position: relative;
+}
+.category-nav ul ul > li > ul,
+.category-nav ul ul > li > .submenu {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 10px);
+  min-width: 240px;
+  padding: 6px 0;
+  background: #fff;
+  border: 1px solid #edf0f3;
+  border-radius: 14px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+  z-index: 1004;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+  pointer-events: none;
+}
+.category-nav ul ul > li:hover > ul,
+.category-nav ul ul > li:hover > .submenu,
+.category-nav ul ul > li:focus-within > ul,
+.category-nav ul ul > li:focus-within > .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* =========================================
+   5) RESPONSIVE CƠ BẢN
+   ========================================= */
+@media (max-width: 991.98px) {
+  .category-bar .col-9 {
+    padding-left: 0;
+  }
+  .category-nav > .category-list,
+  .category-nav > ul {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  #carouselExampleControls {
+    border-radius: 12px;
+  }
+  .category-bar .carousel-inner,
+  .category-bar .carousel-inner img {
+    max-height: 220px;
+    height: 220px;
+  }
+}
+
 /* Footer */
 .footer {
   background: #333;
@@ -301,6 +407,11 @@
   justify-content: center;
   cursor: pointer;
 }
+
+a.project-fav {
+  text-decoration: none;
+}
+
 .project-fav:hover {
   background: hsl(216 77% 50%);
   color: #fff;
@@ -560,6 +671,7 @@ input[type="file"].form-control:hover::file-selector-button {
 .section-search {
   padding: 24px 0;
   background: transparent;
+  background-color: #124c99;
 }
 
 /* Form layout */
@@ -633,3 +745,74 @@ input[type="file"].form-control:hover::file-selector-button {
 .section-search .search-btn:active {
   transform: translateY(0);
 }
+
+/* Show Alert */
+[show-alert] {
+  position: fixed;
+  top: 70px;
+  right: 15px;
+  z-index: 9999;
+  padding: 14px 25px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  animation: alert-show 0.5s ease, alert-hidden 0.5s ease 3s forwards;
+}
+
+[show-alert].alert-success {
+  background: linear-gradient(135deg, #00c853, #64dd17);
+}
+
+[show-alert].alert-danger {
+  background: linear-gradient(135deg, #ff1744, #d50000);
+}
+
+[show-alert].alert-warning {
+  background: linear-gradient(135deg, #ffe082, #ffb300);
+}
+
+[show-alert] [close-alert] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.85);
+  color: #333;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+[show-alert] [close-alert]:hover {
+  background: #fff;
+  color: #000;
+  transform: scale(1.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+@keyframes alert-show {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes alert-hidden {
+  to {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+/* End Show Alert */

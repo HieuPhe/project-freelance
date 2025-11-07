@@ -14,6 +14,22 @@ block main
             - const pathProject = "/projects";
             +sub-menu-1(layoutProjectCategory, pathProject, 0)
         .col-9
+          #carouselExampleControls.carousel.slide(data-ride="carousel")
+            .carousel-inner
+              .carousel-item.active
+                img.d-block.w-100(src="/client/images/banner-1.png" alt="Slide 1")
+              .carousel-item
+                img.d-block.w-100(src="/client/images/banner-2.png" alt="Slide 2")
+              .carousel-item
+                img.d-block.w-100(src="/client/images/banner-3.png" alt="Slide 3")
+
+            .carousel-control-prev(href="#carouselExampleControls" role="button" data-slide="prev")
+              span.carousel-control-prev-icon(aria-hidden="true")
+              span.sr-only Previous
+
+            .carousel-control-next(href="#carouselExampleControls" role="button" data-slide="next")
+              span.carousel-control-next-icon(aria-hidden="true")
+              span.sr-only Next
 
   .section-project-featured.my-5
     .container.my-3

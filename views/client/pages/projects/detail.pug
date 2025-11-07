@@ -25,60 +25,14 @@ block main
             - const formattedDate = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
             div(class="inner-deadline") Hạn chào giá: <b>#{formattedDate}</b>
 
-          //- form(
-          //-   action=`/proposal/add/${project.id}`
-          //-   method="POST"
-          //- )
-          //-   button(
-          //-     type="submit"
-          //-     class="btn btn-success btn-block"
-          //-   ) Đề xuất công việc
-
-          //- Nút mở modal
-          button.btn.btn-primary(type="button" data-toggle="modal" data-target="#applyModal")
-            | Ứng tuyển
-
-          //- Modal có form gửi dữ liệu
-          .modal.fade#applyModal(tabindex="-1" role="dialog")
-            .modal-dialog.modal-dialog-centered(role="document")
-              .modal-content
-                .modal-header
-                  h5.modal-title.text-primary.font-weight-bold Ứng tuyển 
-                  button.close(type="button" data-dismiss="modal" aria-label="Đóng")
-                    span(aria-hidden="true") ×
-
-                //- Form bắt đầu từ đây
-                form(
-                  action=`/proposal/add/${project.id}`
-                  enctype="multipart/form-data" 
-                  method="POST")
-                  .modal-body
-                    input(type="hidden" name="project" value=project.id)
-
-                    .form-group
-                      label(for="fullname") Họ và tên
-                      input#fullname.form-control(type="text" name="fullname" )
-
-                    .form-group
-                      label(for="email") Email
-                      input#email.form-control(type="email" name="email" )
-
-                    .form-group
-                      label(for="phone") Số điện thoại
-                      input#phone.form-control(type="tel" name="phone" )
-
-                    .form-group
-                      label(for="quantity") Gửi hồ sơ
-                      input.form-control.mb-2(
-                         type="file"
-                          name="uploadFile"
-                          accept=".pdf,.doc,.docx,.jpg,.png"
-                      )
-
-                  .modal-footer
-                    button.btn.btn-outline-secondary(type="button" data-dismiss="modal") HỦY
-                    button.btn.btn-primary(type="submit") GỬI HỒ SƠ
-
+          form(
+            action=`/cart/add/${project.id}`
+            method="POST"
+          )
+            button(
+              type="submit"
+              class="btn btn-success btn-block"
+            ) Đề xuất công việc
 
     .container.my-5
       .row

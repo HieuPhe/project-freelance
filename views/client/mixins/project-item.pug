@@ -7,7 +7,6 @@ mixin project-item(item)
           if (item.featured == "1")
             .inner-featured Nổi bật
 
-        // giữ !{} đúng yêu cầu
         .project-description !{item.description}
 
         .project-tags
@@ -15,4 +14,4 @@ mixin project-item(item)
           span.project-pill #{item.deadline ? `${new Date(item.deadline).getDate().toString().padStart(2,'0')}/${(new Date(item.deadline).getMonth()+1).toString().padStart(2,'0')}/${new Date(item.deadline).getFullYear()}` : ''}
 
       .project-right
-        button.project-fav(type="button") Chi tiết
+        a.project-fav(href=`/projects/detail/${item.slug}`) Chi tiết
