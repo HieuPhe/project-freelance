@@ -1,0 +1,40 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+
+block main
+  +alert-success(5000)
+  +alert-error(5000)
+
+  .container.my-3
+    .row
+      .col-12
+        +box-head("Mục đề xuất")
+
+    .row
+      .col-12
+        table.table.table-bordered
+          thead
+            tr
+              th STT
+              th Tên
+              th Ngân sách
+              th Hạn cháo giá
+              th Hành động
+          tbody
+            if(cartDetail.projects.length > 0)
+              each item, index  in cartDetail.projects
+                tr
+                  td #{index + 1}
+                  td
+                    a(href=`/projects/detail/${item.project_id}`) #{item.projectInfo.title}
+                  td #{item.projectInfo.budget.min} - #{item.projectInfo.budget.max} VNĐ
+                  - const d = new Date(item.projectInfo.deadline);
+                  - const formattedDate = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+                  td #{formattedDate}
+                  td
+                    a(href="/checkout", class="btn btn-success") ĐỀ XUẤT CÔNG VIỆC
+                    a(href=`/cart/delete/${item.project_id}`, class="btn btn-danger") Xóa
+            else 
+              p Không có công việc nào trong danh mục đề xuất
+          

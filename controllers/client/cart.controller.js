@@ -1,4 +1,33 @@
 const Cart = require("../../models/cart.model");
+const Project = require("../../models/project.model");
+
+// [GET] /client/cart/
+module.exports.index = async (req, res) => {
+  const cartId = req.cookies.cartId;
+
+  const cart = await Cart.findOne({
+    _id: cartId,
+  });
+
+  if (cart.projects.length > 0) {
+    for (const item of cart.projects) {
+      const projectId = item.project_id;
+      const projectInfo = await Project.findOne({
+        _id: projectId,
+      }).select("title budget slug deadline");
+
+      item.projectInfo = projectInfo;
+    }
+  }
+
+  console.log(cart);
+  
+
+  res.render("client/pages/cart/index", {
+    pageTitle: "Mục đề xuất",
+    cartDetail: cart,
+  });
+};
 
 // [POST] /client/cart/add/projectId
 module.exports.addPost = async (req, res) => {
