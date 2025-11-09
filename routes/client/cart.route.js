@@ -7,5 +7,7 @@ router.get("/", controller.index);
 
 router.post("/add/:projectId", controller.addPost);
 
+router.get("/delete/:projectId", controller.delete);
+
 
 module.exports = router;
