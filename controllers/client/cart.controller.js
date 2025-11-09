@@ -65,13 +65,17 @@ module.exports.delete = async (req, res) => {
   const cartId = req.cookies.cartId;
   const projectId = req.params.projectId;
 
-  await Cart.updateOne({
-    _id: cartId
-  }, {
-    $pull: {projects: { project_id: projectId } }
-  });
+  await Cart.updateOne(
+    {
+      _id: cartId,
+    },
+    {
+      $pull: { projects: { project_id: projectId } },
+    }
+  );
 
   req.flash("success", "Đã xóa công việc khỏi mục đề xuất");
 
   res.redirect(req.get("referer") || "/");
 };
+
