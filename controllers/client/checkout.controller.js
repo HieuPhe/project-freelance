@@ -58,10 +58,6 @@ module.exports.proposal = async (req, res) => {
     projects.push(objectProject);
   }
 
-  console.log(cartId);
-  console.log(userInfo);
-  console.log(projects);
-
   const proposalInfo = {
     cart_id: cartId,
     userInfo: userInfo,
@@ -72,21 +68,34 @@ module.exports.proposal = async (req, res) => {
   proposal.save();
 
   // Cần sửa lại
-  await Cart.updateOne({
-    _id: cartId,
-  }, {
-    projects: []
-  });
+  await Cart.updateOne(
+    {
+      _id: cartId,
+    },
+    {
+      projects: [],
+    }
+  );
 
   res.redirect(`/checkout/success/${proposal.id}`);
-}
+};
 
 // [GET] /client/checkout/success/:proposalId
 module.exports.success = async (req, res) => {
-  console.log(req.params.proposalId);
-  
+  const proposal = await Proposal.findOne({
+    _id: req.params.proposalId,
+  });
+
+  for (const project of proposal.projects) {
+    const projectInfo = await Project.findOne({
+      _id: project.project_id,
+    });
+
+    project.projectInfo = projectInfo;
+  }
+
   res.render("client/pages/checkout/success", {
     pageTitle: "Gửi đề xuất thành công",
-
+    proposal: proposal
   });
 };

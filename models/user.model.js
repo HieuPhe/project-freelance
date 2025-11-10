@@ -8,10 +8,6 @@ const userSchema = new mongoose.Schema(
     avatar: String,
     phone: String,
     description: String,
-    isSeller: {
-      type: Boolean,
-      default: false,
-    },
     status: {
       type: String,
       default: "active",

@@ -5,7 +5,7 @@ const router = express.Router();
 const upload = multer();
 
 const controller = require("../../controllers/client/checkout.controller");
-const uploadCloud = require("../../middlewares/admin/uploadCloud.middlewares");
+const uploadCloud = require("../../middlewares/client/uploadCloud.middlewares");
 
 router.get("/", controller.index);
 

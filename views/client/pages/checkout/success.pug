@@ -5,4 +5,51 @@ block main
   .container.my-3
     .row
       .col-12
-        +box-head("Đặt hàng thành công")
+        +box-head("Đề xuất thành công")
+
+    .row
+      .col-12
+        div(class="alert alert-success")
+          | Chúc mừng bạn đã đề xuất thành công! Nhà tuyển dụng sẽ phản hồi trong thời gian sớm nhất.
+
+    if(proposal)
+      .row
+        .col-12
+          h4(class="mb-2") Thông tin cá nhân
+          table(class="table table-bordered")
+            tbody
+              tr
+                td Họ tên
+                td
+                  b #{proposal.userInfo.fullName}
+              tr
+                td Email
+                td
+                  b #{proposal.userInfo.email}
+              tr
+                td CV
+                td
+                  b #{proposal.userInfo.cv}
+
+
+    .row
+    .col-12
+      h4(class="mb-2") Thông tin công việc
+      table(class="table table-bordered")
+        thead
+          tr
+            th STT
+            th Tên
+            th Ngân sách
+            th Hạn chào giá
+        tbody
+          if(proposal.projects.length > 0)
+            each item, index in proposal.projects
+              tr
+                td #{index + 1}
+                td #{item.projectInfo.title}
+                td #{item.budget.min} - #{item.budget.max} VNĐ
+                - const d = new Date(item.deadline);
+                - const formattedDate = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+                td #{formattedDate}
+
