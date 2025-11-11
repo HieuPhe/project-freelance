@@ -1,21 +1,31 @@
-const mongoose = require("mongoose");
+const  mongoose  = require("mongoose");
+const generate = require("../helpers/generate");
 
 const userSchema = new mongoose.Schema(
   {
-    username: String,
+    fullName: String,
     email: String,
     password: String,
-    avatar: String,
+    tokenUser: {
+      type: String,
+      default: generate.generateRandomString(20),
+    },
     phone: String,
-    description: String,
+    avatar: String,
+    roleUser: {
+      type: String,
+      enum: ["freelancer", "hirer"],
+      required: true
+    },
     status: {
       type: String,
-      default: "active",
+      default: "active"
     },
     deleted: {
       type: Boolean,
       default: false,
     },
+    deleteAt: Date,
   },
   {
     timestamps: true,
