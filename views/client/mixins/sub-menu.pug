@@ -7,23 +7,22 @@ mixin sub-menu(items, path)
           +sub-menu(item.children, path)
 
 
-//- Mixin: thêm level (mặc định 0)
+
 mixin sub-menu-1(items, path, level = 0)
   if level === 0
-    //- danh sách gốc bên trái
     ul.submenu.category-list
       each item in items
         - const hasChildren = item.children && item.children.length > 0
         li(class=hasChildren ? 'has-children' : '')
           a(href=`${path}/${item.slug}`) #{item.title}
           if hasChildren
-            +sub-menu-1(item.children, path, level + 1) // <-- gọi chính nó
+            +sub-menu-1(item.children, path, level + 1)
   else
-    //- submenu con (popup bên phải)
     ul.submenu
       each item in items
         - const hasChildren = item.children && item.children.length > 0
         li(class=hasChildren ? 'has-children' : '')
           a(href=`${path}/${item.slug}`) #{item.title}
           if hasChildren
-            +sub-menu-1(item.children, path, level + 1) // <-- gọi chính nó
+            +sub-menu-1(item.children, path, level + 1)
+

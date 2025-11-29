@@ -24,12 +24,12 @@ block main
           .col-6
             +search(keyword)
 
-      .card.mb-3
-        .card-header Sắp xếp
-          .card-body
-            .row
-              .col-4
-                +sort()
+    .card.mb-3
+      .card-header Sắp xếp
+      .card-body
+        .row
+          .col-6
+            +sort()
 
     .card.mb-3
       .card-header Hành động
@@ -38,7 +38,7 @@ block main
           .col-8 
             if(role.permissions.includes("project_edit"))
               +form-change-multi(`${prefixAdmin}/projects/change-multi?_method=PATCH`)
-          .col-4 
+          .col-4.text-right
             if(role.permissions.includes("project_create"))
               a(
                 href=`${prefixAdmin}/projects/create`
@@ -75,7 +75,7 @@ block main
                   )
                 td #{pagination.limitItems * (pagination.currentPage - 1) + (index + 1)}
                 td #{item.title}
-                td #{item.budget.min} - #{item.budget.max} VNĐ
+                td #{item.budget.min} - #{item.budget.max} Triệu
                 td 
                   input(
                     type="number"
@@ -109,18 +109,18 @@ block main
                   a(
                     href=`${prefixAdmin}/projects/detail/${item.id}`
                     class="btn btn-primary btn-sm"
-                  ) Chi tiết
+                  ) <i class="fas fa-info"></i>
                   if(role.permissions.includes("project_edit"))
                     a(
                       href=`${prefixAdmin}/projects/edit/${item.id}`
                       class="btn btn-info btn-sm"
-                    ) Sửa
+                    ) <i class="fas fa-edit"></i>
                   if(role.permissions.includes("project_delete"))
                     button(
                       class="btn btn-secondary btn-sm ml-1"
                       button-delete
                       data-id=item.id
-                    ) Xóa
+                    ) <i class="fas fa-times"></i>
 
     +pagination(pagination)
 

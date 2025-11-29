@@ -1,4 +1,4 @@
-const  mongoose  = require("mongoose");
+const mongoose = require("mongoose");
 const generate = require("../helpers/generate");
 
 const userSchema = new mongoose.Schema(
@@ -15,11 +15,11 @@ const userSchema = new mongoose.Schema(
     roleUser: {
       type: String,
       enum: ["freelancer", "hirer"],
-      required: true
+      required: true,
     },
     status: {
       type: String,
-      default: "active"
+      default: "active",
     },
     deleted: {
       type: Boolean,

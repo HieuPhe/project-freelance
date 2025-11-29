@@ -1,5 +1,7 @@
 const md5 = require("md5");
+
 const User = require("../../models/user.model");
+const Cart = require("../../models/cart.model");
 
 // [GET] /user/register
 module.exports.register = async (req, res) => {
@@ -37,35 +39,60 @@ module.exports.login = async (req, res) => {
   });
 };
 
-// [GET] /user/login
+// [POST] /user/login
 module.exports.loginPost = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
   const user = await User.findOne({
     email: email,
-    deleted: false
+    deleted: false,
   });
 
-  if(!user) {
+  if (!user) {
     req.flash("error", "Email không tồn tại!");
     res.redirect(req.get("referer") || "/");
     return;
   }
 
-  if(md5(password) !== user.password) {
+  if (md5(password) !== user.password) {
     req.flash("error", "Sai mật khẩu!");
     res.redirect(req.get("referer") || "/");
     return;
   }
 
-  if(user.status === "inactive") {
+  if (user.status === "inactive") {
     req.flash("error", "Tài khoản đã bị khóa!");
     res.redirect(req.get("referer") || "/");
     return;
   }
 
+  console.log(req.cookies.cartId);
+  console.log(user.id);
+
+  await Cart.updateOne(
+    {
+      _id: req.cookies.cartId,
+    },
+    {
+      user_id: user.id,
+    }
+  );
+
   res.cookie("tokenUser", user.tokenUser);
 
   res.redirect("/");
+};
+
+// [GET] /user/logout
+module.exports.logout = async (req, res) => {
+  res.clearCookie("tokenUser");
+  res.redirect("/");
+};
+
+// [GET] /user/info
+module.exports.info = async (req, res) => {
+  res.render("client/pages/user/info", {
+    pageTitle: "Thông tin người dùng",
+  });
 };

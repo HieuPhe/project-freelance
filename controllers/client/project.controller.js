@@ -2,17 +2,40 @@ const Project = require("../../models/project.model");
 const ProjectCategory = require("../../models/project-category.model");
 
 const projectCategoryHelper = require("../../helpers/project-category");
+const paginationHelper = require("../../helpers/pagination");
 
 // [GET] /client/projects
 module.exports.index = async (req, res) => {
+  // Phân trang
+  const countProjects = await Project.countDocuments({ status: "OPEN" });
+
+  let objectPagination = paginationHelper(
+    {
+      currentPage: 1,
+      limitItems: 6,
+    },
+    req.query,
+    countProjects
+  );
+
   const projects = await Project.find({
     status: "OPEN",
     deleted: false,
+  })
+    .sort({ position: "desc" })
+    .limit(objectPagination.limitItems)
+    .skip(objectPagination.skip);
+
+  const category = await ProjectCategory.find({
+    deleted: false,
+    status: "active",
   }).sort({ position: "desc" });
 
   res.render("client/pages/projects/index", {
     pageTitle: "Danh sách công việc",
     projects: projects,
+    pagination: objectPagination,
+    category: category,
   });
 };
 
@@ -42,12 +65,12 @@ module.exports.detail = async (req, res) => {
       status: "OPEN",
     })
       .sort({ position: "desc" })
-      .limit(4);
+      .limit(3)
 
     res.render("client/pages/projects/detail", {
       pageTitle: project.title,
       project: project,
-      projectsNew: projectsNew
+      projectsNew: projectsNew,
     });
   } catch (error) {
     req.flash("error", `Không tồn tại công việc này!`);
@@ -64,6 +87,16 @@ module.exports.category = async (req, res) => {
       deleted: false,
     });
 
+    const countProjects = await Project.countDocuments({ status: "OPEN" });
+    let objectPagination = paginationHelper(
+      {
+        currentPage: 1,
+        limitItems: 6,
+      },
+      req.query,
+      countProjects
+    );
+
     // lấy tất cả danh mục con
     const listSubCategory = await projectCategoryHelper.getSubCategory(
       category.id
@@ -74,11 +107,15 @@ module.exports.category = async (req, res) => {
     const projects = await Project.find({
       project_category_id: { $in: [category.id, ...listSubCategoryId] },
       deleted: false,
-    }).sort({ position: "desc" });
+    })
+      .sort({ position: "desc" })
+      .limit(objectPagination.limitItems)
+      .skip(objectPagination.skip);
 
     res.render("client/pages/projects/index", {
       pageTitle: category.title,
       projects: projects,
+      pagination: objectPagination,
     });
   } catch (error) {
     req.flash("error", `Không tồn tại danh mục này!`);

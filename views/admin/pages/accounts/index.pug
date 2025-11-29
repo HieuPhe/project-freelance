@@ -13,7 +13,7 @@ block main
             if(role.permissions.includes("accounts_create"))
               a(
                 href=`${prefixAdmin}/accounts/create`
-                class="btn btn-outline-success"
+                class="btn btn-outline-primary"
               ) + Thêm mới
 
         table(
@@ -60,13 +60,14 @@ block main
                   a(
                     class="btn btn-primary btn-sm"
                     href=`${prefixAdmin}/accounts/detail/${item.id}`
-                  ) Chi tiết
+                  ) <i class="fas fa-info"></i>
                   if(role.permissions.includes("accounts_edit"))
                     a(
                       class="btn btn-info btn-sm ml-1"
                       href=`${prefixAdmin}/accounts/edit/${item.id}`
-                    ) Sửa
+                    ) <i class="fas fa-edit"></i>
                   if(role.permissions.includes("accounts_delete"))
                     button(
                       class="btn btn-secondary btn-sm ml-1"
-                    ) Xóa
+                    ) <i class="fas fa-times"></i>
+                    

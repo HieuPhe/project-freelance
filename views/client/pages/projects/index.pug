@@ -3,17 +3,36 @@ extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 include ../../mixins/project-layout.pug
 include ../../mixins/sub-menu.pug
+include  ../../mixins/pagination.pug
+include ../../mixins/category-item.pug
 
 block main
 
   .section.category-bar
-  .container
-    .row
-      .col-3
-        nav.category-nav(aria-label="Danh mục việc làm")
-          - const pathProject = "/projects";
-          +sub-menu-1(layoutProjectCategory, pathProject, 0)
-      .col-9
+    .container
+      .category-wrapper
+        .category-left
+          nav.category-nav(aria-label="Danh mục việc làm")
+            - const pathProject = "/projects"
+            +sub-menu-1(layoutProjectCategory, pathProject, 0)
+
+        .category-right
+          #carouselExampleControls.carousel.slide(data-ride="carousel")
+            .carousel-inner
+              .carousel-item.active
+                img.d-block.w-100(src="/client/images/banner-1.png" alt="Slide 1")
+              .carousel-item
+                img.d-block.w-100(src="/client/images/banner-2.png" alt="Slide 2")
+              .carousel-item
+                img.d-block.w-100(src="/client/images/banner-3.png" alt="Slide 3")
+
+            .carousel-control-prev(href="#carouselExampleControls" role="button" data-slide="prev")
+              span.carousel-control-prev-icon(aria-hidden="true")
+              span.sr-only Previous
+
+            .carousel-control-next(href="#carouselExampleControls" role="button" data-slide="next")
+              span.carousel-control-next-icon(aria-hidden="true")
+              span.sr-only Next
 
   .container.my-3
     .row
@@ -22,6 +41,62 @@ block main
 
     //- project-card.pug
     +project-grid(projects)
+
+  +pagination(pagination)
+
+  .section.mid-banner
+    .container
+      .mid-banner-wrapper
+
+        button.mid-banner-prev(type="button")
+          i.fas.fa-chevron-left
+
+        .mid-banner-track(mid-banner-track)
+          a.mid-banner-item(href="javascript:;")
+            img(
+              src="/client/images/mid-banner-1.png"
+              alt="Banner 1"
+            )
+          a.mid-banner-item(href="javascript:;")
+            img(
+              src="/client/images/mid-banner-2.png"
+              alt="Banner 2"
+            )
+          a.mid-banner-item(href="javascript:;")
+            img(
+              src="/client/images/mid-banner-3.png"
+              alt="Banner 3"
+            )
+          a.mid-banner-item(href="javascript:;")
+            img(
+              src="/client/images/mid-banner-3.png"
+              alt="Banner 4"
+            )
+          a.mid-banner-item(href="javascript:;")
+            img(
+              src="/client/images/mid-banner-1.png"
+              alt="Banner 5"
+            )
+          a.mid-banner-item(href="javascript:;")
+            img(
+              src="/client/images/mid-banner-2.png"
+              alt="Banner 6"
+            )
+
+        button.mid-banner-next(type="button")
+          i.fas.fa-chevron-right
+    
+  .section.top-category
+    .container
+      +box-head("Top ngành nghề nổi bật")
+
+      //- Lọc ra chỉ danh mục cha (parent_id null / undefined)
+      - const parentCategories = category.filter(item => !item.parent_id)
+
+      .row
+        each item in parentCategories
+          .col-3
+            +category-item(item)
 
 
 

@@ -3,17 +3,20 @@ extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 include ../../mixins/project-layout.pug
 include ../../mixins/sub-menu.pug
+include  ../../mixins/pagination.pug
+include ../../mixins/category-item.pug
 
 block main
  
   .section.category-bar
     .container
-      .row
-        .col-3
+      .category-wrapper
+        .category-left
           nav.category-nav(aria-label="Danh mục việc làm")
-            - const pathProject = "/projects";
+            - const pathProject = "/projects"
             +sub-menu-1(layoutProjectCategory, pathProject, 0)
-        .col-9
+
+        .category-right
           #carouselExampleControls.carousel.slide(data-ride="carousel")
             .carousel-inner
               .carousel-item.active
@@ -31,6 +34,9 @@ block main
               span.carousel-control-next-icon(aria-hidden="true")
               span.sr-only Next
 
+
+
+
   .section-project-featured.my-5
     .container.my-3
       .row
@@ -39,6 +45,52 @@ block main
 
       +project-grid(projectsFeatured)
 
+      +paginationMini(paginationFeatured, "pageFeatured", "/", query)
+
+  .section.mid-banner
+    .container
+      .mid-banner-wrapper
+
+        button.mid-banner-prev(type="button")
+          i.fas.fa-chevron-left
+
+        .mid-banner-track(mid-banner-track)
+          a.mid-banner-item(href="javascript:;")
+            img(
+              src="/client/images/mid-banner-1.png"
+              alt="Banner 1"
+            )
+          a.mid-banner-item(href="javascript:;")
+            img(
+              src="/client/images/mid-banner-2.png"
+              alt="Banner 2"
+            )
+          a.mid-banner-item(href="javascript:;")
+            img(
+              src="/client/images/mid-banner-3.png"
+              alt="Banner 3"
+            )
+          a.mid-banner-item(href="javascript:;")
+            img(
+              src="/client/images/mid-banner-3.png"
+              alt="Banner 4"
+            )
+          a.mid-banner-item(href="javascript:;")
+            img(
+              src="/client/images/mid-banner-1.png"
+              alt="Banner 5"
+            )
+          a.mid-banner-item(href="javascript:;")
+            img(
+              src="/client/images/mid-banner-2.png"
+              alt="Banner 6"
+            )
+
+        button.mid-banner-next(type="button")
+          i.fas.fa-chevron-right
+
+    
+
   .section-project-new.my-5
     .container.my-3
       .row
@@ -46,3 +98,68 @@ block main
           +box-head("Công việc mới")
 
       +project-grid(projectsNew)
+
+      +paginationMini(paginationNew, "pageNew", "/", query)
+
+  .section.pre-footer
+    .container
+      .box-head
+        h2.inner-title Cơ Hội Việc Làm & Tăng Thu Nhập
+        p.inner-desc
+          | Tham gia tìm kiếm cơ hội việc làm hấp dẫn &
+          | Tăng thu nhập từ việc giới thiệu ứng viên
+
+      .row.pre-footer-row
+        .col-6
+          .pre-footer-card
+            .pre-footer-left
+              h3.pre-footer-title THAM GIA TÌM VIỆC
+              p.pre-footer-text
+                | Bạn cần tìm công việc freelance?
+                br
+                | Hãy tham gia ngay freelancer.vn để
+                br
+                | nhận được nhiều công việc hấp dẫn.
+
+              a.pre-footer-link(href="/user/register")
+                i.fas.fa-arrow-circle-right.mr-2
+                | Tạo hồ sơ ngay
+
+            .pre-footer-right
+              img(
+                src="/client/images/prefooter-1.png"
+                alt="Tham gia tìm việc"
+              )
+
+        .col-6
+          .pre-footer-card
+            .pre-footer-left
+              h3.pre-footer-title THAM GIA GIỚI THIỆU ỨNG VIÊN
+              p.pre-footer-text
+                | Bạn đang sở hữu hồ sơ ứng viên “xịn xò”?
+                br
+                | Giới thiệu các công việc trên freelancer
+                br
+                | để nhận tiền thưởng hấp dẫn.
+
+              a.pre-footer-link(href="/user/register")
+                i.fas.fa-arrow-circle-right.mr-2
+                | Đăng ký ngay
+
+            .pre-footer-right
+              img(
+                src="/client/images/prefooter-2.png"
+                alt="Giới thiệu ứng viên"
+              )
+
+  .section.top-category
+    .container
+      +box-head("Top ngành nghề nổi bật")
+
+      //- Lọc ra chỉ danh mục cha (parent_id null / undefined)
+      - const parentCategories = category.filter(item => !item.parent_id)
+
+      .row
+        each item in parentCategories
+          .col-3
+            +category-item(item)

@@ -7,44 +7,63 @@ block main
   .project-detail
     .container.my-5
       .row 
-        //- .col-6 
         .col-12 
-          if (project.title)
-            h1(class="inner-title") #{project.title}
+          .project-meta-card
+            if (project.title)
+              h1(class="inner-title project-title") #{project.title}
 
-          if (project.category)
-            div(class="inner-category")
-              span Danh mục: 
-                a(href=`projects/${project.category.slug}`) #{project.category.title}
+            //- Hàng meta có icon
+            .project-meta-row
+              if (project.category)
+                .project-meta-item
+                  .project-meta-icon
+                    i(class="fas fa-folder-open")
+                  .project-meta-text
+                    span(class="project-meta-label") Danh mục
+                    a(
+                      href=`/projects?category=${project.category.slug}`
+                      class="project-meta-link"
+                    ) #{project.category.title}
 
-          if (project.budget)
-            div(class="inner-budget") Ngân sách: <b>#{project.budget.min} - #{project.budget.max} VNĐ</b>
+              if (project.budget)
+                .project-meta-item
+                  .project-meta-icon
+                    i(class="fas fa-coins")
+                  .project-meta-text
+                    span(class="project-meta-label") Ngân sách
+                    span(class="project-meta-value")
+                      | #{project.budget.min} - #{project.budget.max} VNĐ
 
-          if (project.deadline)
-            - const d = new Date(project.deadline);
-            - const formattedDate = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
-            div(class="inner-deadline") Hạn chào giá: <b>#{formattedDate}</b>
+              if (project.deadline)
+                - const d = new Date(project.deadline);
+                - const formattedDate = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+                .project-meta-item
+                  .project-meta-icon
+                    i(class="fas fa-clock")
+                  .project-meta-text
+                    span(class="project-meta-label") Hạn chào giá
+                    span(class="project-meta-value") #{formattedDate}
 
-          form(
-            action=`/cart/add/${project.id}`
-            method="POST"
-          )
-            button(
-              type="submit"
-              class="btn btn-success btn-block"
-            ) Đề xuất công việc
+            form(
+              action=`/cart/add/${project.id}`
+              method="POST"
+            )
+              button(
+                type="submit"
+                class="btn btn-primary btn-block project-apply-btn"
+              ) Đề xuất công việc
 
-    .container.my-5
-      .row
-        .col-12
-          +box-head("Mô tả công việc")
-          .inner-desc !{project.description}
+    //- ====== Công việc mới ======
+  .container.my-5
+    .row
+      .col-12
+        +box-head("Mô tả công việc")
+        .inner-desc !{project.description}
 
+  .container.my-3
+    .row
+      .col-12
+        +box-head("Công việc mới")
 
-    
-    .container.my-3
-      .row
-        .col-12
-          +box-head("Công việc mới")
+    +project-grid(projectsNew)
 
-      +project-grid(projectsNew)

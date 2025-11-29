@@ -10,7 +10,7 @@ block main
     div(class="mb-4") Danh mục: <b>#{name}</b>
 
   if (project.budget)
-    div(class="mb-4") Ngân sách: <b>#{project.budget.min} - #{project.budget.max} VNĐ</b>
+    div(class="mb-4") Ngân sách: <b>#{project.budget.min} - #{project.budget.max} Triệu</b>
 
   if (project.deadline)
     - const d = new Date(project.deadline);

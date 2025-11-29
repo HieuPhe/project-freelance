@@ -208,9 +208,26 @@ if (sort) {
 
   if (sortKey && sortValue) {
     const stringSort = `${sortKey}-${sortValue}`;
-    const optionSelected = sortSelect.querySelector(`option[value='${stringSort}']`);
+    const optionSelected = sortSelect.querySelector(
+      `option[value='${stringSort}']`
+    );
     optionSelected.selected = true;
   }
 }
 
 // End Sắp xếp
+
+// Side bar
+document.addEventListener("DOMContentLoaded", function () {
+  var sidebar = document.querySelector(".sider");
+  var main = document.querySelector(".main");
+  var toggleBtn = document.querySelector('[data-toggle="sidebar"]');
+
+  if (!sidebar || !main || !toggleBtn) return;
+
+  toggleBtn.addEventListener("click", function () {
+    sidebar.classList.toggle("is-closed");
+    main.classList.toggle("sidebar-closed");
+  });
+});
+// End Side Bar

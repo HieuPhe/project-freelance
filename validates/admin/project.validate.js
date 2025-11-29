@@ -20,11 +20,7 @@ module.exports.createPost = (req, res, next) => {
   // Validate
      const min= parseInt(req.body.budgetMin);
      const max= parseInt(req.body.budgetMax);
-  if (isNaN(min) || isNaN(max)) {
-    req.flash("warning", "Ngân sách phải là số!");
-    res.redirect(req.get("referer") || "/");
-    return;
-  }
+
   if (min <= 0 || max <= 0) {
     req.flash("warning", "Ngân sách không được nhỏ hơn hoặc bằng 0!");
     res.redirect(req.get("referer") || "/");

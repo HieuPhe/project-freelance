@@ -1,43 +1,81 @@
 header.header
   .container
-    .row.align-items-center 
-      .col-3 
+    .row.align-items-center
+
+      // LOGO
+      .col-3
         .inner-logo 
           a(href="/")
             img(src="/client/images/image.png", alt="logo")
 
-      .col-9 
-        .inner-menu 
-          ul 
+      // SEARCH
+      .col-4
+        form(
+          action="/search" 
+          method="GET"
+          class="w-100"
+        )
+          div(class="form-group d-flex mb-0 header-search")
+            input(
+              type="text" 
+              placeholder="Nhập từ khóa..." 
+              class="form-control" 
+              name="keyword"
+              value=keyword
+            )
+            button(
+              type="submit" 
+              class="btn btn-primary"
+            ) Tìm
+
+      // MENU
+      .col-5
+        .inner-menu
+          ul(class="mb-0")
             li 
               a(href="/") Trang chủ
             li 
               a(href="/projects") Công việc
-            li 
-              a(href="/cart") Công việc đề xuất (#{miniCart ? miniCart.totalProject : 0})
-            li 
-              a(href="/user/login") Đăng nhập
-            li 
-              a(href="/user/register") Đăng ký
-              
+            
+            if(user)
+              li.dropdown
+                a(
+                  href="javascript:;"
+                  class="dropdown-toggle"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                ) #{user.fullName}
 
-.section-search
-  .container
-    form(
-      action="/search" 
-      method="GET" 
-      class="search-form"
-    )
-      .form-group
-        input(
-          type="text"
-          placeholder="Nhập từ khóa..."
-          class="form-control search-input"
-          name="keyword"
-          value=keyword
-        )
-        button(type="submit" class="btn btn-primary search-btn") Tìm
+                .dropdown-menu.dropdown-menu-right
+                  a(
+                    class="dropdown-item"
+                    href="/user/info"
+                  ) Hồ sơ cá nhân
 
+                  a(
+                    class="dropdown-item"
+                    href="/cart"
+                  ) Công việc đề xuất (#{miniCart ? miniCart.totalProject : 0})
 
+                  div(class="dropdown-divider")
+
+                  a(
+                    class="dropdown-item text-danger"
+                    href="/user/logout"
+                  ) Đăng xuất
+            else 
+              li 
+                a(href="/user/login") Đăng nhập
+              li 
+                a(href="/user/register") Đăng ký
+
+.section.top-strip
+  .strip-wrapper
+    .strip-center
+      span.strip-text Hãy chia sẻ nhu cầu công việc để nhận gợi ý việc làm tốt nhất
+
+    .strip-right
+      a.strip-btn(href="/user/info") Cập nhật nhu cầu công việc →
 
 

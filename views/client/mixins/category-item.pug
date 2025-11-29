@@ -1,0 +1,16 @@
+//- views/client/mixins/category-item.pug
+
+mixin category-item(item)
+  .top-category-item
+    a(href=`/projects?category=${item.slug}`)
+      .top-category-icon
+        if item.thumbnail
+          img(
+            src=item.thumbnail
+            alt=item.title
+          )
+        else
+          span.top-category-icon-fallback #{item.title.charAt(0)}
+
+      h3.top-category-title #{item.title}
+

@@ -1,0 +1,60 @@
+mixin pagination(pagination)
+  nav
+    ul(class="pagination")
+
+      if(pagination.currentPage > 1)
+        li(class="page-item")
+          button(
+            class="page-link" 
+            button-pagination = pagination.currentPage -1
+          ) <i class="fas fa-chevron-left"></i>
+      
+      - for (var i = Math.max(1, pagination.currentPage -1); i <= Math.min(pagination.totalPage, pagination.currentPage +1); i++)
+        li(class=`page-item ${pagination.currentPage == i ? "active" : ""} `)
+          button(
+            class="page-link"
+            button-pagination = i
+          ) #{i}
+      if(pagination.currentPage < pagination.totalPage)
+        li(class="page-item")
+          button(
+            class="page-link"
+            button-pagination = pagination.currentPage +1
+          ) <i class="fas fa-chevron-right"></i>
+
+
+
+mixin paginationMini(pagination, pageKey, basePath, query)
+  -
+    const key = pageKey || "page"
+    const path = basePath || ""
+    const q = query || {}
+    const total = pagination ? pagination.totalPage : 0
+    const current = pagination ? pagination.currentPage : 1
+
+    function buildUrl(p){
+      let params = []
+      for (let k in q){
+        if (q[k] !== undefined && k !== key){
+          params.push(`${k}=${encodeURIComponent(q[k])}`)
+        }
+      }
+      params.push(`${key}=${p}`)
+      const qs = params.length ? `?${params.join("&")}` : ""
+      return `${path}${qs}`
+    }
+
+  if pagination && total > 1
+    nav.pagination-wrap-simple
+      ul.pagination.simple
+
+        // Prev
+        li.page-item(class=current==1 ? "disabled" : "")
+          a.page-link(href=buildUrl(current - 1))
+            i.fas.fa-chevron-left
+
+        // Next
+        li.page-item(class=current==total ? "disabled" : "")
+          a.page-link(href=buildUrl(current + 1))
+            i.fas.fa-chevron-right
+
