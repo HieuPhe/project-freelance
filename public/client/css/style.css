@@ -326,48 +326,169 @@
 ================================ */
 .footer {
   background: #183f5c;
+  color: #e5e7eb;
+  margin-top: 40px;
+  font-size: 18px;
+}
+
+/* TOP AREA */
+.footer-top {
   border-top: 1px solid rgba(148, 163, 184, 0.25);
 }
 
-.footer p {
+.footer-logo {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.footer-desc {
   font-size: 18px;
-  color: white;
-  margin-bottom: 4px;
+  color: #cbd5f5;
+  margin-bottom: 12px;
 }
 
-.footer .text-muted {
-  color: #6b7280 !important;
+/* contact list */
+.footer-contact {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-/* Right menu */
-.footer-right ul {
+.footer-contact li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.footer-contact i {
+  width: 20px;
+  margin-right: 8px;
+  color: #38bdf8;
+}
+
+.footer-contact a {
+  color: #e5e7eb;
+  text-decoration: none;
+}
+
+.footer-contact a:hover {
+  color: #38bdf8;
+}
+
+/* titles */
+.footer-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+/* links column */
+.footer-links ul {
   list-style: none;
   padding: 0;
-  margin-top: 10px;
-
-  display: flex;
-  justify-content: flex-end;
-  gap: 16px;
+  margin: 0;
 }
 
-.footer-right ul li a {
-  font-size: 18px;
-  font-weight: 500;
-  color: white;
-  text-decoration: none;
+.footer-links ul li {
+  margin-bottom: 6px;
+}
 
-  padding: 4px 6px;
-  border-radius: 6px;
-  transition: color 0.18s ease, background 0.18s ease, transform 0.12s ease,
+.footer-links ul li a {
+  font-size: 18px;
+  color: #e5e7eb;
+  text-decoration: none;
+  transition: color 0.18s ease, transform 0.12s ease;
+}
+
+.footer-links ul li a:hover {
+  color: #38bdf8;
+  transform: translateX(2px);
+}
+
+/* newsletter */
+.footer-news-desc {
+  font-size: 18px;
+  color: #d1d5db;
+  margin-bottom: 8px;
+}
+
+.footer-form .form-control {
+  border-radius: 999px 0 0 999px;
+  border: none;
+  font-size: 14px;
+}
+
+.footer-form .btn {
+  border-radius: 0 999px 999px 0;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 14px;
+}
+
+/* BOTTOM AREA */
+.footer-bottom {
+  border-top: 1px solid rgba(15, 23, 42, 0.45);
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.footer-copy {
+  font-size: 18px;
+  color: #9ca3af;
+}
+
+/* social */
+.footer-social {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-social-label {
+  font-size: 20px;
+  color: #cbd5e1;
+}
+
+.footer-social a {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e5e7eb;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease,
     box-shadow 0.18s ease;
 }
 
-.footer-right ul li a:hover {
-  background: rgba(37, 99, 235, 0.08);
-  color: #2563eb;
+.footer-social a:hover {
+  background: #38bdf8;
+  color: #0f172a;
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.12);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.35);
 }
+
+/* responsive */
+@media (max-width: 768px) {
+  .footer {
+    text-align: left;
+  }
+
+  .footer-bottom {
+    text-align: center;
+  }
+
+  .footer-social {
+    justify-content: center;
+    margin-top: 4px;
+  }
+}
+
 
 /* =================================
    BOX HEAD
@@ -682,7 +803,7 @@
 
 /* submenu-1 giữ nguyên style cũ */
 .section.category-bar .category-left .category-nav {
-  width: 100%;
+  width: 80%;
 }
 
 /* Tùy chỉnh nhỏ để nhìn gọn như mẫu */

@@ -1,19 +1,74 @@
 footer.footer
-  .container
-    .row.py-4
-      .col-md-6
-        .footer-left
-          p.mb-1 © 2025 HieuPhe
-          p.mb-0.text-muted Nền tảng freelance giúp kết nối Nhà tuyển dụng và Freelancer
+  .footer-top
+    .container
+      .row.py-5
+        .col-md-4.mb-4.mb-md-0
+          .footer-left
+            h4.footer-logo #{settingGeneral.websiteName}
+            p.footer-desc
+              | Nền tảng freelance giúp kết nối Nhà tuyển dụng và Freelancer,
+              |  mang đến nhiều cơ hội việc làm linh hoạt và uy tín.
 
-      .col-md-6.text-md-right.mt-3.mt-md-0
-        .footer-right
-          ul
-            li 
-              a(href="/") Trang chủ
-            li 
-              a(href="/projects") Công việc
-            li 
-              a(href="#") Về chúng tôi
-            li 
-              a(href="#") Liên hệ
+            ul.footer-contact
+              li
+                i(class="fas fa-map-marker-alt")
+                span #{settingGeneral.address}
+              li
+                i(class="fas fa-envelope")
+                span #{settingGeneral.email}
+              li
+                i(class="fas fa-phone-alt")
+                span #{settingGeneral.phone}
+
+        .col-md-4.mb-4.mb-md-0
+          .footer-links
+            h5.footer-title Liên kết
+            ul
+              li
+                a(href="/") Trang chủ
+              li
+                a(href="/projects") Công việc
+              li
+                a(href="#") Về chúng tôi
+              li
+                a(href="#") Hướng dẫn sử dụng
+              li
+                a(href="#") Câu hỏi thường gặp
+
+        .col-md-4
+          .footer-newsletter
+            h5.footer-title Nhận thông báo việc làm
+            p.footer-news-desc
+              | Nhập email để nhận các công việc mới phù hợp với bạn.
+
+            form(
+              action="#"
+              method="POST"
+              class="footer-form"
+            )
+              .input-group
+                input(
+                  type="email"
+                  name="email"
+                  class="form-control"
+                  placeholder="Nhập email của bạn"
+                  required
+                )
+                .input-group-append
+                  button(
+                    type="submit"
+                    class="btn btn-primary"
+                  ) Đăng ký
+
+  .footer-bottom
+    .container
+      .d-flex.flex-column.flex-md-row.justify-content-between.align-items-center.py-3
+        p.mb-2.mb-md-0.footer-copy #{settingGeneral.copyright}
+        .footer-social
+          span.footer-social-label Kết nối:
+          a(href="#" aria-label="Facebook")
+            i(class="fab fa-facebook-f")
+          a(href="#" aria-label="LinkedIn")
+            i(class="fab fa-linkedin-in")
+          a(href="#" aria-label="Github")
+            i(class="fab fa-github")

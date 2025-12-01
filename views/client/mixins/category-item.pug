@@ -2,7 +2,7 @@
 
 mixin category-item(item)
   .top-category-item
-    a(href=`/projects?category=${item.slug}`)
+    a(href=`/projects/${item.slug}`)
       .top-category-icon
         if item.thumbnail
           img(

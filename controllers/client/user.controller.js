@@ -67,17 +67,22 @@ module.exports.loginPost = async (req, res) => {
     return;
   }
 
-  console.log(req.cookies.cartId);
-  console.log(user.id);
+  const cart = await Cart.findOne({
+    user_id: user.id,
+  });
 
-  await Cart.updateOne(
-    {
-      _id: req.cookies.cartId,
-    },
-    {
-      user_id: user.id,
-    }
-  );
+  if (cart) {
+    res.cookie("cartId", cart.id);
+  } else {
+    await Cart.updateOne(
+      {
+        _id: req.cookies.cartId,
+      },
+      {
+        user_id: user.id,
+      }
+    );
+  }
 
   res.cookie("tokenUser", user.tokenUser);
 

@@ -81,13 +81,24 @@ module.exports.detail = async (req, res) => {
 // [GET] /client/projects/:slugCategory
 module.exports.category = async (req, res) => {
   try {
-    const category = await ProjectCategory.findOne({
+    // Danh mục hiện tại
+    const currentCategory = await ProjectCategory.findOne({
       slug: req.params.slugCategory,
       status: "active",
       deleted: false,
     });
 
-    const countProjects = await Project.countDocuments({ status: "OPEN" });
+    if (!currentCategory) {
+      req.flash("error", `Không tồn tại danh mục này!`);
+      return res.redirect(`/projects`);
+    }
+
+    // Phân trang: (gợi ý) nên đếm theo category này thôi, nhưng tạm giữ nguyên cách của bạn
+    const countProjects = await Project.countDocuments({
+      status: "OPEN",
+      project_category_id: currentCategory.id,
+    });
+
     let objectPagination = paginationHelper(
       {
         currentPage: 1,
@@ -97,28 +108,37 @@ module.exports.category = async (req, res) => {
       countProjects
     );
 
-    // lấy tất cả danh mục con
+    // lấy tất cả danh mục con của currentCategory
     const listSubCategory = await projectCategoryHelper.getSubCategory(
-      category.id
+      currentCategory.id
     );
 
     const listSubCategoryId = listSubCategory.map((item) => item.id);
 
     const projects = await Project.find({
-      project_category_id: { $in: [category.id, ...listSubCategoryId] },
+      project_category_id: { $in: [currentCategory.id, ...listSubCategoryId] },
       deleted: false,
+      status: "OPEN",
     })
       .sort({ position: "desc" })
       .limit(objectPagination.limitItems)
       .skip(objectPagination.skip);
 
+    // 🔥 Thêm đoạn này: lấy toàn bộ danh mục để dùng ở Pug
+    const categories = await ProjectCategory.find({
+      deleted: false,
+      status: "active",
+    }).sort({ position: "desc" });
+
     res.render("client/pages/projects/index", {
-      pageTitle: category.title,
+      pageTitle: currentCategory.title,
       projects: projects,
       pagination: objectPagination,
+      category: categories, // ✅ mảng category cho Pug dùng .filter()
     });
   } catch (error) {
     req.flash("error", `Không tồn tại danh mục này!`);
     res.redirect(`/projects`);
   }
 };
+
