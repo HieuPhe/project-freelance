@@ -142,6 +142,16 @@ block main
               td(class="text-center")
                 input(type="checkbox")
 
+          //- Cài đặt chung
+          tr
+            td(colspan="4")
+              b Cà đặt chung
+          tr(data-name="setting-general")
+            td Cài đặt 
+            each item in records
+              td(class="text-center")
+                input(type="checkbox")
+
     form(
       id="form-change-permissions"
       method="POST"

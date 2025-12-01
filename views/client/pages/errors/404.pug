@@ -1,0 +1,26 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet" href="/client/css/404.css")
+    title VieLance | 404 Not Found Page
+
+  body
+    nav
+      .nav__logo
+        a(href="/") VieLance
+
+    .container
+      .header
+        h1 404
+        h3 Không thể tìm thấy trang!
+
+      img(src="/client/images/404.jpg" alt="not found")
+
+      .footer
+        p Chúng tôi không thể tìm thấy trang bạn muốn truy cập. Vui lòng trở lại trang chủ!
+        button(
+          onclick ="history.back()"
+        ) Trở lại trang chủ

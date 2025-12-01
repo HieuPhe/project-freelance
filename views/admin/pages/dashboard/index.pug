@@ -1,4 +1,55 @@
 extends ../../layouts/default.pug
 
 block main
-  h1 Tổng quan
+  h1 Trang tổng quan 
+
+  .row.mt-4 
+    .col-12 
+
+    .col-6
+      .card.mb-4
+        .card-header Danh mục sản phẩm
+        .card-body
+          p Số lượng: 
+            b #{statistic.categoryProject.total}
+          p Hoạt động: 
+            b #{statistic.categoryProject.active}
+          p Dừng hoạt động: 
+            b #{statistic.categoryProject.inactive}
+
+    .col-6
+      .card.mb-4
+        .card-header Số lượng công việc
+        .card-body
+          p Số lượng: 
+            b #{statistic.categoryProject.total}
+          p Đang mở: 
+            b #{statistic.project.OPEN}
+          p Đang hoạt động: 
+            b #{statistic.project.IN_PROGRESS}
+          p Hoàn thành: 
+            b #{statistic.project.CLOSED}
+          p Hủy: 
+            b #{statistic.project.CANCELLED}
+
+    .col-6
+      .card.mb-4
+        .card-header Tài khoản admin
+        .card-body
+          p Số lượng: 
+            b #{statistic.account.total}
+          p Hoạt động: 
+            b #{statistic.account.active}
+          p Dừng hoạt động: 
+            b #{statistic.account.inactive}
+
+    .col-6
+      .card.mb-4
+        .card-header Số lượng người dùng
+        .card-body
+          p Số lượng: 
+            b #{statistic.user.total}
+          p Hoạt động: 
+            b #{statistic.user.active}
+          p Dừng hoạt động: 
+            b #{statistic.user.inactive}
