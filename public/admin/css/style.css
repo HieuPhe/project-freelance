@@ -510,3 +510,75 @@
   transform: translateY(-1px);
   box-shadow: 0 6px 18px rgba(185, 28, 28, 0.45);
 }
+
+/* =========================
+   AUTH (LOGIN / REGISTER)
+========================= */
+
+.auth-card {
+  background: #ffffff;
+  padding: 40px 45px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 8px 26px rgba(15, 23, 42, 0.08);
+}
+
+.auth-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.auth-desc {
+  font-size: 16px;
+  color: #475569;
+  margin-bottom: 25px;
+}
+
+.auth-form .form-group {
+  margin-bottom: 18px;
+}
+
+.auth-form label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.auth-form input,
+.auth-form select {
+  height: 46px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 15px;
+  transition: 0.2s ease;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+.auth-btn {
+  background: linear-gradient(90deg, #1d4ed8, #2563eb);
+  height: 48px;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+  transition: 0.18s ease;
+}
+
+.auth-btn:hover {
+  background: linear-gradient(90deg, #1e40af, #1d4ed8);
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.38);
+}
+
+.auth-foot {
+  font-size: 15px;
+  color: #475569;
+}

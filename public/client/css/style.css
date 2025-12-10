@@ -186,7 +186,7 @@
 /* TEXT */
 .section.top-strip .strip-center {
   position: relative;
-  left: 25%;
+  left: 19%;
   z-index: 2;
 }
 
@@ -1565,6 +1565,191 @@ nav {
   margin-bottom: 14px;
   font-size: 20px;
   line-height: 1.8;
+}
+
+/* ============================
+   USER PROFILE PAGE
+============================ */
+
+.section.user-profile {
+  /* nếu cần tách với phần trên thì thêm margin-top */
+  margin-top: 24px;
+}
+
+.user-profile-card {
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  padding: 24px 26px 20px;
+}
+
+/* HEADER */
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 14px;
+}
+
+.user-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 18px;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.4);
+  flex-shrink: 0;
+}
+
+.user-avatar span {
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.user-basic {
+  flex: 1 1 auto;
+}
+
+.user-name {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.user-email {
+  font-size: 18px;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.user-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ROLE BADGE */
+
+.user-role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.user-role-badge.is-hirer {
+  background: rgba(22, 163, 74, 0.08);
+  color: #15803d;
+  border: 1px solid rgba(22, 163, 74, 0.4);
+}
+
+.user-role-badge.is-freelancer {
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+  border: 1px solid rgba(37, 99, 235, 0.4);
+}
+
+/* STATUS BADGE */
+
+.user-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.user-status-badge.is-active {
+  background: rgba(34, 197, 94, 0.08);
+  color: #16a34a;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.user-status-badge.is-blocked {
+  background: rgba(239, 68, 68, 0.08);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* BODY */
+
+.user-profile-body {
+  margin-top: 10px;
+}
+
+.user-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+}
+
+.user-info-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 6px 0;
+  border-bottom: 1px dashed #e5e7eb;
+}
+
+.user-info-list li:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 18px;
+  color: #6b7280;
+}
+
+.info-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  text-align: right;
+}
+
+/* actions */
+
+.user-profile-actions {
+  margin-top: 4px;
+}
+
+.user-profile-actions .btn.btn-outline-primary,
+.user-profile-actions .btn.btn-outline-secondary {
+  font-size: 18px;
+  padding: 5px 14px;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .user-profile-card {
+    padding: 18px 16px;
+  }
+
+  .user-profile-header {
+    flex-direction: row;
+  }
+
+  .user-info-list li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .info-value {
+    text-align: left;
+    margin-top: 2px;
+  }
 }
 
 

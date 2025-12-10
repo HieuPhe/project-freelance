@@ -1,0 +1,98 @@
+extends ../../layouts/default
+
+block main 
+  .container.my-4
+    .mb-3
+      a(
+        href="/hirer/projects"
+        class="btn btn-link p-0"
+      )
+        i(class="fas fa-arrow-left mr-1")
+        | Quay lại danh sách công việc
+
+    .d-flex.justify-content-between.align-items-center.mb-2
+      h1(class="h4 mb-0") Đề xuất cho công việc
+      if project
+        span(class="text-muted") #{project.title}
+
+    if proposals && proposals.length
+      table(class="table table-hover table-bordered")
+        thead
+          tr
+            th Thứ tự
+            th Freelancer
+            th Ngân sách
+            th Hạn chót
+            th Trạng thái
+            th Thao tác
+        tbody
+          each proposal, index in proposals
+            - var projectItem = (proposal.projects && proposal.projects.length) ? proposal.projects[0] : null
+            tr
+              td #{index + 1}
+
+              td
+                if proposal.freelancerId
+                  b #{proposal.freelancerId.fullName}
+                  br
+                  small(class="text-muted") #{proposal.freelancerId.email}
+                else
+                  | [Tài khoản đã bị xóa]
+
+              td
+                if projectItem && projectItem.budget
+                  | #{projectItem.budget.min} - #{projectItem.budget.max}
+                else
+                  | -
+
+              td
+                if projectItem && projectItem.deadline
+                  | #{projectItem.deadline.toLocaleDateString("vi-VN")}
+                else
+                  | -
+
+              td
+                if proposal.status === "SUBMITTED"
+                  span(class="badge badge-secondary") Chờ duyệt
+                else if proposal.status === "ACCEPTED"
+                  span(class="badge badge-success") Đã chấp nhận
+                else if proposal.status === "REJECTED"
+                  span(class="badge badge-danger") Đã từ chối
+                else
+                  span(class="badge badge-light") #{proposal.status}
+
+              td
+                .d-flex
+                  if proposal.status === "SUBMITTED"
+                    form(
+                      method="POST"
+                      action=`/hirer/proposals/${proposal._id}/accept`
+                    )
+                      button(
+                        type="submit"
+                        class="btn btn-sm btn-success mr-2"
+                      ) Chấp nhận
+
+                    form(
+                      method="POST"
+                      action=`/hirer/proposals/${proposal._id}/reject`
+                    )
+                      button(
+                        type="submit"
+                        class="btn btn-sm btn-outline-danger"
+                      ) Từ chối
+                  else if proposal.status === "ACCEPTED"
+                    button(
+                      type="button"
+                      class="btn btn-sm btn-success mr-2"
+                      disabled
+                    ) Đã chấp nhận
+                  else if proposal.status === "REJECTED"
+                    button(
+                      type="button"
+                      class="btn btn-sm btn-outline-danger"
+                      disabled
+                    ) Đã từ chối
+    else
+      .alert.alert-info.mt-3
+        | Chưa có đề xuất nào cho công việc này.

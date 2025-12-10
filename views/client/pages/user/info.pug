@@ -1,10 +1,89 @@
-extends ../../layouts/default.pug
-include ../../mixins/box-head.pug
+extends ../../layouts/default
 
 block main
-  .container.my-3
-    .row 
-      .col-12 
-        +box-head("Thông tin người dùng")
+  .section.user-profile
+    .container.my-5
+      .row
+        .col-lg-8.col-md-10.mx-auto
+          .user-profile-card
 
-    div #{user}
+            // HEADER
+            .user-profile-header
+              .user-avatar
+                - const nameParts = (user.fullName || "").split(" ")
+                - var initials = ""
+                - for (var i = 0; i < nameParts.length && i < 2; i++) {
+                -   initials += nameParts[i].charAt(0).toUpperCase()
+                - }
+                span #{initials || "U"}
+
+              .user-basic
+                h1.user-name #{user.fullName}
+                p.user-email #{user.email}
+
+                .user-tags
+                  if user.roleUser
+                    span.user-role-badge(class=user.roleUser === "hirer" ? "is-hirer" : "is-freelancer")
+                      if user.roleUser === "Hirer"
+                        | Nhà tuyển dụng
+                      else
+                        | Freelancer
+
+                  if user.status
+                    span.user-status-badge(class=user.status === "active" ? "is-active" : "is-blocked")
+                      if user.status === "active"
+                        | Đang hoạt động
+                      else
+                        | Đã khóa
+
+            // BODY
+            .user-profile-body
+              - const createdAt = new Date(user.createdAt || "")
+              - const updatedAt = new Date(user.updatedAt || "")
+              - const createdLabel = `${createdAt.getDate().toString().padStart(2,"0")}/${(createdAt.getMonth()+1).toString().padStart(2,"0")}/${createdAt.getFullYear()}`
+              - const updatedLabel = `${updatedAt.getDate().toString().padStart(2,"0")}/${(updatedAt.getMonth()+1).toString().padStart(2,"0")}/${updatedAt.getFullYear()}`
+
+              ul.user-info-list
+                li
+                  span.info-label Họ và tên
+                  span.info-value #{user.fullName}
+
+                li
+                  span.info-label Email
+                  span.info-value #{user.email}
+
+                li
+                  span.info-label Vai trò
+                  span.info-value
+                    if user.roleUser === "hirer"
+                      | Nhà tuyển dụng 
+                    else if user.roleUser === "freelancer"
+                      | Freelancer
+                    else
+                      | #{user.roleUser}
+
+                li
+                  span.info-label Trạng thái
+                  span.info-value
+                    if user.status === "active"
+                      | Đang hoạt động
+                    else
+                      | #{user.status}
+
+                li
+                  span.info-label Ngày tạo tài khoản
+                  span.info-value #{createdLabel}
+
+                li
+                  span.info-label Cập nhật gần nhất
+                  span.info-value #{updatedLabel}
+
+              .user-profile-actions
+                a(
+                  href="/user/edit"
+                  class="btn btn-outline-primary btn-sm"
+                ) Chỉnh sửa thông tin
+                a(
+                  href="/user/change-password"
+                  class="btn btn-outline-secondary btn-sm ml-2"
+                ) Đổi mật khẩu

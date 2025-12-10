@@ -21,6 +21,14 @@ const projectSchema = new mongoose.Schema(
       enum: ["OPEN", "IN_PROGRESS", "CLOSED", "CANCELLED"],
       default: "OPEN",
     },
+    hirerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    acceptedFreelancerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     featured: String,
     position: Number,
     slug: {

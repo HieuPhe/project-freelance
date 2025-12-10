@@ -31,13 +31,17 @@ header.header
       // MENU
       .col-5
         .inner-menu
-          ul(class="mb-0")
+          ul.mb-0
             li 
               a(href="/") Trang chủ
             li 
               a(href="/projects") Công việc
             
-            if(user)
+            if user
+              li
+                // debug nhỏ nếu muốn
+                // span.text-muted (role: #{user.roleUser})
+
               li.dropdown
                 a(
                   href="javascript:;"
@@ -48,27 +52,35 @@ header.header
                 ) #{user.fullName}
 
                 .dropdown-menu.dropdown-menu-right
-                  a(
-                    class="dropdown-item"
-                    href="/user/info"
-                  ) Hồ sơ cá nhân
+                  a.dropdown-item(href="/user/info") Hồ sơ cá nhân
 
-                  a(
-                    class="dropdown-item"
-                    href="/cart"
-                  ) Công việc đề xuất (#{miniCart ? miniCart.totalProject : 0})
+                  // ⭐ FREELANCER
+                  if user.roleUser && user.roleUser.toLowerCase() === "freelancer"
+                    a.dropdown-item(href="/cart")
+                      | Công việc đề xuất (
+                      = miniCart ? miniCart.totalProject : 0
+                      | )
 
-                  div(class="dropdown-divider")
+                    a.dropdown-item(href="/freelancer/proposals")
+                      | Đề xuất của tôi
 
-                  a(
-                    class="dropdown-item text-danger"
-                    href="/user/logout"
-                  ) Đăng xuất
+                  // ⭐ HIRER
+                  if user.roleUser && user.roleUser.toLowerCase() === "hirer"
+                    a.dropdown-item(href="/hirer/projects")
+                      | Công việc của tôi
+
+                    a.dropdown-item(href="/hirer/projects/create")
+                      | Đăng công việc mới
+
+                  .dropdown-divider
+
+                  a.dropdown-item.text-danger(href="/user/logout") Đăng xuất
             else 
               li 
                 a(href="/user/login") Đăng nhập
               li 
                 a(href="/user/register") Đăng ký
+
 
 .section.top-strip
   .strip-wrapper
@@ -76,6 +88,11 @@ header.header
       span.strip-text Hãy chia sẻ nhu cầu công việc để nhận gợi ý việc làm tốt nhất
 
     .strip-right
-      a.strip-btn(href="/user/info") Cập nhật nhu cầu công việc →
-
+      if user
+        if user.roleUser && user.roleUser.toLowerCase() === "freelancer"
+          a.strip-btn(href="/user/info") Cập nhật nhu cầu công việc →
+        else if user.roleUser && user.roleUser.toLowerCase() === "hirer"
+          a.strip-btn(href="/projects/create") Đăng công việc mới ngay →
+      else
+        a.strip-btn(href="/user/register") Tham gia miễn phí →
 

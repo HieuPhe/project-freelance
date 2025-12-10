@@ -1,0 +1,76 @@
+extends ../../layouts/default
+
+block main
+  .container.my-4
+    .mb-3
+      a(
+        href="/hirer/projects"
+        class="btn btn-link p-0"
+      )
+        i(class="fas fa-arrow-left mr-1")
+        | Quay lại danh sách công việc
+
+    h1(class="h4 mb-3") Đăng công việc mới
+
+    form(
+      action="/hirer/projects/create"
+      method="POST"
+    )
+      .form-group
+        label(for="title") Tên công việc
+        input(
+          type="text"
+          id="title"
+          name="title"
+          class="form-control"
+          placeholder="Ví dụ: Thiết kế landing page giới thiệu sản phẩm"
+          required
+        )
+
+      .form-group
+        label(for="description") Mô tả chi tiết
+        textarea(
+          id="description"
+          name="description"
+          class="form-control"
+          rows="6"
+          placeholder="Mô tả yêu cầu công việc, kỹ năng, phạm vi, kết quả mong muốn..."
+          required
+        )
+
+      .form-row
+        .form-group.col-md-4
+          label(for="budgetMin") Ngân sách tối thiểu
+          input(
+            type="number"
+            id="budgetMin"
+            name="budgetMin"
+            class="form-control"
+            min="0"
+            placeholder="Ví dụ: 1000000"
+          )
+
+        .form-group.col-md-4
+          label(for="budgetMax") Ngân sách tối đa
+          input(
+            type="number"
+            id="budgetMax"
+            name="budgetMax"
+            class="form-control"
+            min="0"
+            placeholder="Ví dụ: 3000000"
+          )
+
+        .form-group.col-md-4
+          label(for="deadline") Hạn chót
+          input(
+            type="date"
+            id="deadline"
+            name="deadline"
+            class="form-control"
+          )
+
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Đăng công việc

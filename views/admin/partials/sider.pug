@@ -18,6 +18,8 @@
       if(role.permissions.includes("accounts_view"))
         li 
           a(href=`${prefixAdmin}/accounts`) Tài khoản
+      li 
+        a(href=`${prefixAdmin}/users`) Người dùng
       if(role.permissions.includes("setting-general"))
         li 
           a(href=`${prefixAdmin}/settings/general`) Cài đặt chung

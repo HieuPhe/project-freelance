@@ -1,6 +1,7 @@
 const Cart = require("../../models/cart.model");
 const Project = require("../../models/project.model");
 const Proposal = require("../../models/proposal.model");
+const User = require("../../models/user.model");
 
 // [GET] /checkout
 module.exports.index = async (req, res) => {
@@ -10,7 +11,7 @@ module.exports.index = async (req, res) => {
     _id: cartId,
   });
 
-  if (cart.projects.length > 0) {
+  if (cart && cart.projects.length > 0) {
     for (const item of cart.projects) {
       const projectId = item.project_id;
       const projectInfo = await Project.findOne({
@@ -29,55 +30,85 @@ module.exports.index = async (req, res) => {
 
 // [POST] /client/checkout/proposal
 module.exports.proposal = async (req, res) => {
-  const cartId = req.cookies.cartId;
-  const userInfo = req.body;
+  try {
+    const cartId = req.cookies.cartId;
+    const userInfo = req.body;
 
-  const cart = await Cart.findOne({
-    _id: cartId,
-  });
+    // Lấy user hiện tại (freelancer) từ token
+    const tokenUser = req.cookies.tokenUser;
 
-  const projects = [];
+    const user = await User.findOne({
+      tokenUser: tokenUser,
+      deleted: false,
+      status: "active",
+    });
 
-  for (const project of cart.projects) {
-    const objectProject = {
-      project_id: project.project_id,
-      budget: {
-        min: 0,
-        max: 0,
-      },
-      deadline: 0,
+    if (!user) {
+      req.flash("error", "Bạn cần đăng nhập để gửi đề xuất!");
+      return res.redirect("/user/login");
+    }
+
+    const cart = await Cart.findOne({
+      _id: cartId,
+    });
+
+    if (!cart || !cart.projects || cart.projects.length === 0) {
+      req.flash("error", "Giỏ công việc đang trống!");
+      return res.redirect("/cart");
+    }
+
+    const projects = [];
+
+    for (const project of cart.projects) {
+      const objectProject = {
+        project_id: project.project_id,
+        budget: {
+          min: 0,
+          max: 0,
+        },
+        deadline: null,
+      };
+
+      const projectInfo = await Project.findOne({
+        _id: project.project_id,
+      }).select("budget deadline");
+
+      if (projectInfo) {
+        objectProject.budget = projectInfo.budget || { min: 0, max: 0 };
+        objectProject.deadline = projectInfo.deadline || null;
+      }
+
+      projects.push(objectProject);
+    }
+
+    const proposalInfo = {
+      cart_id: cartId,
+      freelancerId: user._id, 
+      userInfo: userInfo,
+      projects: projects,
+      status: "SUBMITTED",
+      deleted: false,
     };
 
-    const projectInfo = await Project.findOne({
-      _id: project.project_id,
-    }).select("budget deadline");
+    const proposal = new Proposal(proposalInfo);
+    await proposal.save();
 
-    objectProject.budget = projectInfo.budget;
-    objectProject.deadline = projectInfo.deadline;
+    // Xóa giỏ đã gửi đề xuất
+    await Cart.updateOne(
+      {
+        _id: cartId,
+      },
+      {
+        projects: [],
+      }
+    );
 
-    projects.push(objectProject);
+    res.redirect(`/checkout/success/${proposal.id}`);
+  } catch (error) {
+    console.log("checkout proposal error:", error);
+    req.flash("error", "Không thể gửi đề xuất, vui lòng thử lại!");
+    return res.redirect("/cart");
   }
-
-  const proposalInfo = {
-    cart_id: cartId,
-    userInfo: userInfo,
-    projects: projects,
-  };
-
-  const proposal = new Proposal(proposalInfo);
-  proposal.save();
-
-  // Cần sửa lại
-  await Cart.updateOne(
-    {
-      _id: cartId,
-    },
-    {
-      projects: [],
-    }
-  );
-
-  res.redirect(`/checkout/success/${proposal.id}`);
 };
 
 // [GET] /client/checkout/success/:proposalId
@@ -86,16 +117,18 @@ module.exports.success = async (req, res) => {
     _id: req.params.proposalId,
   });
 
-  for (const project of proposal.projects) {
-    const projectInfo = await Project.findOne({
-      _id: project.project_id,
-    });
+  if (proposal && proposal.projects.length > 0) {
+    for (const project of proposal.projects) {
+      const projectInfo = await Project.findOne({
+        _id: project.project_id,
+      });
 
-    project.projectInfo = projectInfo;
+      project.projectInfo = projectInfo;
+    }
   }
 
   res.render("client/pages/checkout/success", {
     pageTitle: "Gửi đề xuất thành công",
-    proposal: proposal
+    proposal: proposal,
   });
 };

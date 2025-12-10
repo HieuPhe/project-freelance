@@ -1,0 +1,67 @@
+extends ../../layouts/default
+
+block main 
+  .container.my-4
+    .d-flex.justify-content-between.align-items-center.mb-3
+      h1(class="h4 mb-0") Đề xuất của tôi
+
+    if proposals && proposals.length
+      table(class="table table-hover table-bordered")
+        thead
+          tr
+            th Thứ tự
+            th Tên công việc
+            th Ngân sách (theo job)
+            th Hạn chót
+            th Trạng thái
+            th Ngày gửi
+        tbody
+          each proposal, index in proposals
+            if proposal.projects && proposal.projects.length
+              each projectItem in proposal.projects
+                tr
+                  td #{index + 1}
+
+                  // Tên công việc
+                  td
+                    if projectItem.project_id
+                      a(
+                        href=`/projects/${projectItem.project_id.slug}`
+                      ) #{projectItem.project_id.title}
+                    else
+                      | [Công việc đã bị xóa]
+
+                  // Ngân sách
+                  td
+                    if projectItem.budget
+                      | #{projectItem.budget.min} - #{projectItem.budget.max}
+                    else
+                      | -
+
+                  // Hạn chót
+                  td
+                    if projectItem.deadline
+                      | #{projectItem.deadline.toLocaleDateString("vi-VN")}
+                    else
+                      | -
+
+                  // Trạng thái đề xuất
+                  td
+                    if proposal.status === "SUBMITTED"
+                      span(class="badge badge-secondary") Chờ duyệt
+                    else if proposal.status === "ACCEPTED"
+                      span(class="badge badge-success") Đã được chấp nhận
+                    else if proposal.status === "REJECTED"
+                      span(class="badge badge-danger") Đã bị từ chối
+                    else
+                      span(class="badge badge-light") #{proposal.status}
+
+                  // Ngày gửi
+                  td
+                    if proposal.createdAt
+                      | #{proposal.createdAt.toLocaleDateString("vi-VN")}
+                    else
+                      | -
+    else
+      .alert.alert-info.mt-3
+        | Bạn chưa gửi đề xuất nào.
