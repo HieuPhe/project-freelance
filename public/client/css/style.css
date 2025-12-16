@@ -489,7 +489,6 @@
   }
 }
 
-
 /* =================================
    BOX HEAD
 ================================= */
@@ -778,9 +777,15 @@
 }
 
 @keyframes categoryOcean {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Card wrapper chứa 2 khối */
@@ -1752,4 +1757,105 @@ nav {
   }
 }
 
+/* ============================
+   CHECKOUT PAGE
+   ============================ */
 
+.checkout-page h1.h4 {
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.checkout-card {
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.checkout-card .card-header {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.checkout-card .card-header h2.h6 {
+  font-weight: 600;
+}
+
+.checkout-page .table thead th {
+  background-color: #f8fafc;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.checkout-page .table tbody td {
+  vertical-align: middle;
+}
+
+.btn-submit-proposal {
+  font-weight: 600;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+/* mobile chỉnh lại khoảng cách */
+@media (max-width: 767.98px) {
+  .checkout-page {
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .checkout-card {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* ============================
+   CART / MỤC ĐỀ XUẤT
+   ============================ */
+
+.cart-page h1.h4 {
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.cart-card {
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background-color: #ffffff;
+}
+
+.cart-card .card-header {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cart-card .card-header h2.h6 {
+  font-weight: 600;
+}
+
+.cart-page .table thead th {
+  background-color: #f8fafc;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.cart-page .table tbody td {
+  vertical-align: middle;
+}
+
+.cart-page td .btn {
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-page td .btn + .btn {
+  margin-left: 8px;
+}
+
+@media (max-width: 767.98px) {
+  .cart-page {
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+  }
+}

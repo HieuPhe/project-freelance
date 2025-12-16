@@ -6,79 +6,96 @@ block main
   +alert-success(5000)
   +alert-error(5000)
 
-  .container.my-3
-    .row
+  .container.my-4.checkout-page
+    .row.mb-3
       .col-12
-        +box-head("Đặt hàng")
+        h1(class="h4 mb-0") Đề xuất công việc
 
-    .row
-      .col-12
-        table(class="table table-bordered")
-          thead
-            tr
-              th STT
-              th Tên
-              th Ngân sách
-              th Hạn cháo giá
-          tbody
-            if(cartDetail.projects.length > 0)
-              each item, index  in cartDetail.projects
-                tr
-                  td #{index + 1}
-                  td #{item.projectInfo.title}
-                  td #{item.projectInfo.budget.min} - #{item.projectInfo.budget.max} VNĐ
-                  - const d = new Date(item.projectInfo.deadline);
-                  - const formattedDate = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
-                  td #{formattedDate}
-            else
-              tr
-                td(
-                  colspan="7"
-                  class="text-center"
-                ) Giỏ hàng trống.
-
-    if (cartDetail.projects.length > 0)
+    if cartDetail.projects.length > 0
       .row
-        .col-12
-          .card.p-4.my-4
-            form(
-              action="/checkout/proposal"
-              method="POST"
-              enctype="multipart/form-data"
-            )
-              div(class="form-group")
-                label(for="fullName") Họ tên
-                input(
-                  type="text"
-                  class="form-control"
-                  id="fullName"
-                  name="fullName"
-                  required
-                )
+        // ========== BÊN TRÁI: DANH SÁCH CÔNG VIỆC ==========
+        .col-lg-8.mb-4
+          .card.checkout-card.shadow-sm
+            .card-header.bg-light
+              h2(class="h6 mb-0") Công việc bạn đang đề xuất
+            .card-body.p-0
+              table(class="table table-hover table-bordered mb-0")
+                thead.thead-light
+                  tr
+                    th.STT STT
+                    th Tên công việc
+                    th Ngân sách
+                    th Hạn chót
+                tbody
+                  each item, index in cartDetail.projects
+                    tr
+                      td #{index + 1}
+                      td #{item.projectInfo.title}
+                      td
+                        | #{item.projectInfo.budget.min} - #{item.projectInfo.budget.max} VNĐ
+                      td
+                        - var d = new Date(item.projectInfo.deadline);
+                        - var day = d.getDate().toString().padStart(2, "0");
+                        - var month = (d.getMonth() + 1).toString().padStart(2, "0");
+                        - var year = d.getFullYear();
+                        | #{day}/#{month}/#{year}
 
-              div(class="form-group")
-                label(for="email") Email
-                input(
-                  type="text"
-                  class="form-control"
-                  id="email"
-                  name="email"
-                  required
-                )
+        // ========== BÊN PHẢI: FORM THÔNG TIN CÁ NHÂN ==========
+        .col-lg-4.mb-4
+          .card.checkout-card 
+            .card-header.bg-light
+              h2(class="h6 mb-0") Thông tin cá nhân & CV
+            .card-body
+              form(
+                action="/checkout/proposal"
+                method="POST"
+                enctype="multipart/form-data"
+              )
+                .form-group
+                  label(for="fullName") Họ tên
+                  input(
+                    type="text"
+                    class="form-control"
+                    id="fullName"
+                    name="fullName"
+                    placeholder="Nhập họ tên đầy đủ"
+                    required
+                  )
 
-              div(class="form-group")
-                label(for="cv") Tải lên CV
-                input(
-                  type="file"
-                  class="form-control"
-                  id="cv"
-                  name="cv"
-                  accept=".pdf,.doc,.docx"
-                  required
-                )
+                .form-group
+                  label(for="email") Email
+                  input(
+                    type="text"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    placeholder="Nhập email để nhận phản hồi"
+                    required
+                  )
 
-              div(class="form-group")
+                .form-group
+                  label(for="cv") Tải lên CV
+                  input(
+                    type="file"
+                    class="form-control"
+                    id="cv"
+                    name="cv"
+                    accept=".pdf,.doc,.docx"
+                    required
+                  )
+                  small.form-text.text-muted
+                    | Định dạng .pdf, .doc, .docx. Dung lượng ≤ 5MB.
+
                 button(
                   type="submit"
-                  class="btn btn-success btn-block"
-                ) GỬI ĐỀ XUẤT
+                  class="btn btn-success btn-block btn-submit-proposal"
+                ) Gửi đề xuất
+
+    else
+      .row
+        .col-12
+          .alert.alert-info.text-center
+            | Giỏ hàng trống. 
+            | Hãy quay lại 
+            a(href="/projects") danh sách công việc
+            |  để chọn công việc phù hợp.

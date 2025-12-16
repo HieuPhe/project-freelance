@@ -2,13 +2,11 @@ header.header
   .container
     .row.align-items-center
 
-      // LOGO
       .col-3
         .inner-logo 
           a(href="/")
             img(src=settingGeneral.logo, alt=settingGeneral.websiteName)
 
-      // SEARCH
       .col-4
         form(
           action="/search" 
@@ -28,7 +26,6 @@ header.header
               class="btn btn-primary"
             ) Tìm
 
-      // MENU
       .col-5
         .inner-menu
           ul.mb-0
@@ -38,10 +35,6 @@ header.header
               a(href="/projects") Công việc
             
             if user
-              li
-                // debug nhỏ nếu muốn
-                // span.text-muted (role: #{user.roleUser})
-
               li.dropdown
                 a(
                   href="javascript:;"
@@ -54,23 +47,38 @@ header.header
                 .dropdown-menu.dropdown-menu-right
                   a.dropdown-item(href="/user/info") Hồ sơ cá nhân
 
-                  // ⭐ FREELANCER
+                  // FREELANCER
                   if user.roleUser && user.roleUser.toLowerCase() === "freelancer"
                     a.dropdown-item(href="/cart")
                       | Công việc đề xuất (
-                      = miniCart ? miniCart.totalProject : 0
+                      | #{miniCart && miniCart.totalProject ? miniCart.totalProject : 0}
                       | )
 
                     a.dropdown-item(href="/freelancer/proposals")
                       | Đề xuất của tôi
 
-                  // ⭐ HIRER
-                  if user.roleUser && user.roleUser.toLowerCase() === "hirer"
-                    a.dropdown-item(href="/hirer/projects")
-                      | Công việc của tôi
+                    a.dropdown-item(href="/freelancer/jobs")
+                      | Công việc đang làm
 
-                    a.dropdown-item(href="/hirer/projects/create")
-                      | Đăng công việc mới
+                    a.dropdown-item(href="/freelancer/jobs/history")
+                      | Lịch sử công việc
+
+                  // HIRER
+                  if user.roleUser && user.roleUser.toLowerCase() === "hirer"
+                    a(
+                      class="dropdown-item"
+                      href="/hirer/projects"
+                    ) Công việc của tôi
+
+                    a(
+                      class="dropdown-item"
+                      href="/hirer/jobs"
+                    ) Công việc đang thực hiện
+
+                    a(
+                      class="dropdown-item"
+                      href="/hirer/jobs/history"
+                    ) Lịch sử công việc
 
                   .dropdown-divider
 

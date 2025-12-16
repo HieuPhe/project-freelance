@@ -1,0 +1,47 @@
+extends ../../layouts/default
+
+block main
+  .container.my-4
+    .d-flex.justify-content-between.align-items-center.mb-3
+      h1(class="h4 mb-0") Lịch sử công việc
+
+    if projects && projects.length
+      table(class="table table-hover table-bordered")
+        thead
+          tr
+            th Thứ tự
+            th Tên công việc
+            th Freelancer
+            th Hạn chót
+            th Trạng thái
+        tbody
+          each project, index in projects
+            tr
+              // STT
+              td #{index + 1}
+
+              // Tên job
+              td
+                a(href=`/projects/${project.slug}`) #{project.title}
+
+              // Freelancer đã nhận job
+              td
+                if project.acceptedFreelancerId
+                  b #{project.acceptedFreelancerId.fullName}
+                  br
+                  small.text-muted #{project.acceptedFreelancerId.email}
+                else
+                  span.text-muted Chưa có freelancer
+
+              // Deadline
+              td
+                if project.deadline
+                  | #{project.deadline.toLocaleDateString("vi-VN")}
+                else
+                  | -
+
+              td
+                span(class="badge badge-primary") Hoàn thành
+    else
+      .alert.alert-info.mt-3
+        | Bạn chưa có công việc nào đã hoàn thành.

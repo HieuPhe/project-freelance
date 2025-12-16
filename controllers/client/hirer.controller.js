@@ -8,8 +8,9 @@ module.exports.myProjects = async (req, res) => {
 
   const projects = await Project.find({
     hirerId: user._id,
+    status: { $in: ["OPEN", "IN_PROGRESS"] },
     deleted: false,
-  }).sort({ createdAt: -1 });
+  });
 
   res.render("client/pages/hirer/projects", {
     pageTitle: "Công việc của tôi",
@@ -18,7 +19,6 @@ module.exports.myProjects = async (req, res) => {
 };
 
 // [GET] /hirer/projects/:projectId/proposals
-// Xem danh sách đề xuất của 1 công việc
 module.exports.viewProposals = async (req, res) => {
   const user = res.locals.user;
   const projectId = req.params.projectId;
@@ -49,7 +49,6 @@ module.exports.viewProposals = async (req, res) => {
 };
 
 // [POST] /hirer/proposals/:proposalId/accept
-// Hirer chấp nhận 1 đề xuất
 module.exports.acceptProposal = async (req, res) => {
   const user = res.locals.user;
   const proposalId = req.params.proposalId;
@@ -77,11 +76,9 @@ module.exports.acceptProposal = async (req, res) => {
     return res.redirect("/hirer/projects");
   }
 
-  // Đánh dấu đề xuất được chấp nhận
   proposal.status = "ACCEPTED";
   await proposal.save();
 
-  // Các đề xuất khác cùng project → REJECTED
   await Proposal.updateMany(
     {
       _id: { $ne: proposal._id },
@@ -93,7 +90,6 @@ module.exports.acceptProposal = async (req, res) => {
     }
   );
 
-  // Cập nhật project
   project.status = "IN_PROGRESS";
   project.acceptedFreelancerId = proposal.freelancerId;
   await project.save();
@@ -103,7 +99,6 @@ module.exports.acceptProposal = async (req, res) => {
 };
 
 // [POST] /hirer/proposals/:proposalId/reject
-// Hirer từ chối 1 đề xuất
 module.exports.rejectProposal = async (req, res) => {
   const user = res.locals.user;
   const proposalId = req.params.proposalId;
@@ -139,7 +134,6 @@ module.exports.rejectProposal = async (req, res) => {
 };
 
 // [GET] /hirer/projects/create
-// Form đăng công việc mới
 module.exports.create = async (req, res) => {
   res.render("client/pages/hirer/create", {
     pageTitle: "Đăng công việc mới",
@@ -147,7 +141,6 @@ module.exports.create = async (req, res) => {
 };
 
 // [POST] /hirer/projects/create
-// Xử lý đăng công việc mới
 module.exports.createPost = async (req, res) => {
   try {
     const user = res.locals.user;
@@ -205,5 +198,82 @@ module.exports.createPost = async (req, res) => {
     console.log("createPost error:", error);
     req.flash("error", "Không thể tạo công việc, vui lòng thử lại!");
     return res.redirect("/hirer/projects/create");
+  }
+};
+
+// [GET] /hirer/jobs
+module.exports.myWorkingProjects = async (req, res) => {
+  const user = res.locals.user;
+
+  const projects = await Project.find({
+    hirerId: user._id,
+    status: "IN_PROGRESS",
+    deleted: false,
+  })
+    .sort({ updatedAt: -1 })
+    .populate("acceptedFreelancerId");
+
+  res.render("client/pages/hirer/jobs", {
+    pageTitle: "Công việc đang thực hiện",
+    projects: projects,
+  });
+};
+
+// [GET] /hirer/jobs/history
+module.exports.history = async (req, res) => {
+  const user = res.locals.user;
+
+  const projects = await Project.find({
+    hirerId: user._id,
+    status: "CLOSED",
+    deleted: false,
+  })
+    .sort({ updatedAt: -1 })
+    .populate("acceptedFreelancerId"); // ⭐ THIẾU DÒNG NÀY
+
+  res.render("client/pages/hirer/history", {
+    pageTitle: "Lịch sử công việc",
+    projects,
+  });
+};
+
+
+// [POST] /hirer/projects/:projectId/complete
+module.exports.completeProject = async (req, res) => {
+  try {
+    const user = res.locals.user;
+    const projectId = req.params.projectId;
+
+    // 1. Tìm project theo id + hirerId
+    const project = await Project.findOne({
+      _id: projectId,
+      hirerId: user._id,
+      deleted: false,
+    });
+
+    if (!project) {
+      console.log("completeProject: project not found or not belong to hirer");
+      req.flash("error", "Không tìm thấy công việc!");
+      return res.redirect("/hirer/jobs");
+    }
+
+    if (project.status !== "IN_PROGRESS") {
+      console.log("completeProject: project.status =", project.status);
+      req.flash(
+        "error",
+        "Chỉ những công việc đang thực hiện mới có thể đánh dấu hoàn thành!"
+      );
+      return res.redirect("/hirer/jobs");
+    }
+
+    project.status = "CLOSED";
+    await project.save();
+
+    req.flash("success", "Đã đánh dấu hoàn thành công việc!");
+    return res.redirect("/hirer/jobs");
+  } catch (error) {
+    console.log("completeProject error:", error);
+    req.flash("error", "Không thể hoàn thành công việc, vui lòng thử lại!");
+    return res.redirect("/hirer/jobs");
   }
 };

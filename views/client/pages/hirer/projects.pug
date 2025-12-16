@@ -31,7 +31,7 @@ block main
 
               td
                 if project.budget && project.budget.min != null && project.budget.max != null
-                  | #{project.budget.min} - #{project.budget.max}
+                  | #{project.budget.min} - #{project.budget.max} Triệu VNĐ
                 else
                   | -
 
@@ -46,7 +46,7 @@ block main
                   span(class="badge badge-success") Mở
                 else if project.status === "IN_PROGRESS"
                   span(class="badge badge-warning") Đang thực hiện
-                else if project.status === "COMPLETED"
+                else if project.status === "CLOSED"
                   span(class="badge badge-primary") Hoàn thành
                 else
                   span(class="badge badge-secondary") #{project.status}

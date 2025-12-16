@@ -1,67 +1,59 @@
 extends ../../layouts/default
 
-block main 
+block main
   .container.my-4
-    .d-flex.justify-content-between.align-items-center.mb-3
-      h1(class="h4 mb-0") Đề xuất của tôi
+    h1.h4.mb-3 Đề xuất của tôi
 
-    if proposals && proposals.length
-      table(class="table table-hover table-bordered")
+    if proposals.length
+      table.table.table-hover.table-bordered
         thead
           tr
             th Thứ tự
-            th Tên công việc
-            th Ngân sách (theo job)
-            th Hạn chót
+            th Công việc
+            th Ngân sách
+            th Deadline
             th Trạng thái
             th Ngày gửi
         tbody
-          each proposal, index in proposals
-            if proposal.projects && proposal.projects.length
-              each projectItem in proposal.projects
-                tr
-                  td #{index + 1}
+          each item, index in proposals
+            - var p = item.projects && item.projects.length ? item.projects[0] : null;
+            tr
+              td #{index + 1}
 
-                  // Tên công việc
-                  td
-                    if projectItem.project_id
-                      a(
-                        href=`/projects/${projectItem.project_id.slug}`
-                      ) #{projectItem.project_id.title}
-                    else
-                      | [Công việc đã bị xóa]
+              // TÊN JOB
+              td
+                if p && p.project_id
+                  a(href=`/projects/${p.project_id.slug}`)
+                    | #{p.project_id.title}
+                else
+                  | [Công việc đã bị xóa]
 
-                  // Ngân sách
-                  td
-                    if projectItem.budget
-                      | #{projectItem.budget.min} - #{projectItem.budget.max}
-                    else
-                      | -
+              // NGÂN SÁCH
+              td
+                if p && p.budget
+                  | #{p.budget.min} - #{p.budget.max} Triệu VNĐ
+                else
+                  | -
 
-                  // Hạn chót
-                  td
-                    if projectItem.deadline
-                      | #{projectItem.deadline.toLocaleDateString("vi-VN")}
-                    else
-                      | -
+              // DEADLINE
+              td
+                if p && p.deadline
+                  | #{p.deadline.toLocaleDateString("vi-VN")}
+                else
+                  | -
 
-                  // Trạng thái đề xuất
-                  td
-                    if proposal.status === "SUBMITTED"
-                      span(class="badge badge-secondary") Chờ duyệt
-                    else if proposal.status === "ACCEPTED"
-                      span(class="badge badge-success") Đã được chấp nhận
-                    else if proposal.status === "REJECTED"
-                      span(class="badge badge-danger") Đã bị từ chối
-                    else
-                      span(class="badge badge-light") #{proposal.status}
+              // TRẠNG THÁI PROPOSAL
+              td
+                if item.status === "SUBMITTED"
+                  span.badge.badge-secondary Chờ duyệt
+                else if item.status === "ACCEPTED"
+                  span.badge.badge-success Đã nhận
+                else if item.status === "REJECTED"
+                  span.badge.badge-danger Từ chối
+                else
+                  span.badge.badge-light #{item.status}
 
-                  // Ngày gửi
-                  td
-                    if proposal.createdAt
-                      | #{proposal.createdAt.toLocaleDateString("vi-VN")}
-                    else
-                      | -
+              // NGÀY GỬI
+              td #{item.createdAt.toLocaleDateString("vi-VN")}
     else
-      .alert.alert-info.mt-3
-        | Bạn chưa gửi đề xuất nào.
+      .alert.alert-info.mt-3 Chưa có đề xuất nào.

@@ -6,35 +6,71 @@ block main
   +alert-success(3000)
   +alert-error(3000)
 
-  .container.my-3
-    .row
+  .container.my-4.cart-page
+    .row.mb-3
       .col-12
-        +box-head("Mục đề xuất")
+        h1(class="h4 mb-0") Mục đề xuất
 
-    .row
-      .col-12
-        table.table.table-bordered
-          thead
-            tr
-              th STT
-              th Tên
-              th Ngân sách
-              th Hạn cháo giá
-              th Hành động
-          tbody
-            if(cartDetail.projects.length > 0)
-              each item, index  in cartDetail.projects
-                tr
-                  td #{index + 1}
-                  td
-                    a(href=`/projects/detail/${item.project_id}`) #{item.projectInfo.title}
-                  td #{item.projectInfo.budget.min} - #{item.projectInfo.budget.max} VNĐ
-                  - const d = new Date(item.projectInfo.deadline);
-                  - const formattedDate = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
-                  td #{formattedDate}
-                  td
-                    a(href="/checkout", class="btn btn-success") ĐỀ XUẤT CÔNG VIỆC
-                    a(href=`/cart/delete/${item.project_id}`, class="btn btn-danger") Xóa
-            else 
-              p Không có công việc nào trong danh mục đề xuất
-          
+    if cartDetail.projects.length > 0
+      .row
+        .col-12
+          .card.cart-card.shadow-sm
+            .card-header.bg-light.d-flex.justify-content-between.align-items-center
+              h2(class="h6 mb-0") Công việc bạn đã thêm vào mục đề xuất
+              a(
+                href="/checkout"
+                class="btn btn-primary btn-sm"
+              ) Tiếp tục gửi đề xuất →
+
+            .card-body.p-0
+              table(class="table table-hover table-bordered mb-0")
+                thead.thead-light
+                  tr
+                    th(style="width: 60px;") STT
+                    th Tên công việc
+                    th Ngân sách
+                    th Hạn chót
+                    th(style="width: 200px;") Hành động
+                tbody
+                  each item, index in cartDetail.projects
+                    tr
+                      td #{index + 1}
+
+                      td
+                        a(href=`/projects/detail/${item.project_id}`) #{item.projectInfo.title}
+
+                      td
+                        | #{item.projectInfo.budget.min} - #{item.projectInfo.budget.max} VNĐ
+
+                      td
+                        - var d = new Date(item.projectInfo.deadline);
+                        - var day = d.getDate().toString().padStart(2, "0");
+                        - var month = (d.getMonth() + 1).toString().padStart(2, "0");
+                        - var year = d.getFullYear();
+                        | #{day}/#{month}/#{year}
+
+                      td
+                        .d-flex.align-items-center
+                          a(
+                            href="/checkout"
+                            class="btn btn-success btn-sm d-flex align-items-center mr-2"
+                          )
+                            i.fas.fa-paper-plane.mr-1
+
+                          a(
+                            href=`/cart/delete/${item.project_id}`
+                            class="btn btn-light btn-sm text-danger border"
+                            title="Xóa công việc"
+                          )
+                            i.fas.fa-trash
+
+
+
+    else
+      .row
+        .col-12
+          .alert.alert-info.text-center
+            | Bạn chưa có công việc nào trong mục đề xuất.
+            |  
+            a(href="/projects") Xem danh sách công việc
+            |  để thêm công việc phù hợp.

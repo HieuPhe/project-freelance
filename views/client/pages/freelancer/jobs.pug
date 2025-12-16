@@ -1,0 +1,36 @@
+extends ../../layouts/default
+
+block main
+  .container.my-4
+    h1(class="h4 mb-3") Công việc đang làm
+
+    if jobs && jobs.length
+      table(class="table table-hover table-bordered")
+        thead
+          tr
+            th Thứ tự
+            th Tên công việc
+            th Hạn chót
+            th Trạng thái
+        tbody
+          each job, index in jobs
+            tr
+              // STT
+              td #{index + 1}
+
+              // Tên job
+              td
+                a(href=`/projects/${job.slug}`) #{job.title}
+
+              // Deadline
+              td
+                if job.deadline
+                  | #{job.deadline.toLocaleDateString("vi-VN")}
+                else
+                  | -
+
+              td
+                span(class="badge badge-warning") Đang thực hiện
+    else
+      .alert.alert-info.mt-3
+        | Bạn chưa có công việc nào đang làm.
