@@ -12,6 +12,7 @@ block main
             th Tên công việc
             th Hạn chót
             th Trạng thái
+            th Thao tác
         tbody
           each job, index in jobs
             tr
@@ -34,6 +35,10 @@ block main
 
               td 
                 a.btn.btn-primary(href=`/chat`) Chat
+
+                a.btn.btn-sm.btn-info(
+                  href=`/progress/freelancer/${job._id}`
+                ) Cập nhật tiến độ
     else
       .alert.alert-info.mt-3
         | Bạn chưa có công việc nào đang làm.

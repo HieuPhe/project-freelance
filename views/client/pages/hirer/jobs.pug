@@ -54,6 +54,11 @@ block main
               td 
                 a.btn.btn-primary(href=`/chat`) Chat
 
+                a.btn.btn-sm.btn-info(
+                  href=`/progress/hirer/${project._id}`
+                ) Xem tiến độ
+
+
     else
       .alert.alert-info.mt-3
         | Hiện tại bạn chưa có công việc nào đang thực hiện.

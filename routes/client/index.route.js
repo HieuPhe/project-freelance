@@ -14,6 +14,7 @@ const userRoute = require("./user.route");
 const freelancerRoute  = require("./freelancer.route");
 const hirerRoute  = require("./hirer.route");
 const chatRoute  = require("./chat.route");
+const progressRoute  = require("./progess.route");
 
 
 module.exports = (app) => {
@@ -43,5 +44,6 @@ module.exports = (app) => {
 
   app.use("/chat",authMiddleware.requireAuth, chatRoute);
 
+  app.use("/progress",authMiddleware.requireAuth, progressRoute);
 
 };
