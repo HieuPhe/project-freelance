@@ -1,4 +1,4 @@
-const  mongoose  = require("mongoose");
+const mongoose = require("mongoose");
 
 const projectProgressSchema = new mongoose.Schema(
   {
@@ -32,9 +32,7 @@ const projectProgressSchema = new mongoose.Schema(
       default: false,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 const ProjectProgress = mongoose.model("ProjectProgress", projectProgressSchema, "project-progress");

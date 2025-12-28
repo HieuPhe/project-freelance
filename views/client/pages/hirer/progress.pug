@@ -1,16 +1,18 @@
 extends ../../layouts/default
 
 block main
-  .container.my-4
-    h1.h4.mb-3 Tiến độ công việc: #{project.title}
-
-    if progressList.length
-      each item in progressList
-        .border.rounded.p-2.mb-2
-          b #{item.freelancerId.fullName}
-          small.text-muted.ml-2 #{item.createdAt.toLocaleString("vi-VN")}
-          p.mt-2 #{item.content}
-          if item.percent !== undefined
+  .container.my-4(data-project-id=project._id)
+    h1.h4.mb-3 Tiến độ công việc
+    .progress-list
+      if progressList.length
+        each item in progressList
+          .border.rounded.p-2.mb-2
+            b #{item.freelancerId.fullName}
+            small.text-muted.ml-2 #{item.createdAt.toLocaleString("vi-VN")}
+            p.mt-2 #{item.content}
             span.badge.badge-success #{item.percent}%
-    else
-      p.text-muted Freelancer chưa cập nhật tiến độ.
+      else
+        p.text-muted Freelancer chưa cập nhật tiến độ
+
+block scripts
+  script(src="/client/js/progress.js")

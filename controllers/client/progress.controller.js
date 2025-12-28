@@ -1,13 +1,18 @@
+const mongoose = require("mongoose");
 const Project = require("../../models/project.model");
 const ProjectProgress = require("../../models/project-progress.model");
+
+const progressSocket = require("../../sockets/client/progress.socket");
 
 /**
  * Freelancer xem + cập nhật tiến độ
  */
 module.exports.freelancerView = async (req, res) => {
+  // GẮN SOCKET – GIỐNG CHAT
+  progressSocket(res);
+
   const { projectId } = req.params;
 
-  // 2. Kiểm tra quyền freelancer
   const project = await Project.findOne({
     _id: projectId,
     acceptedFreelancerId: res.locals.user._id,
@@ -20,9 +25,8 @@ module.exports.freelancerView = async (req, res) => {
     return res.redirect("/freelancer/jobs");
   }
 
-  // 3. Lấy lịch sử tiến độ
   const progressList = await ProjectProgress.find({
-    project: projectId,
+    projectId: projectId,
     deleted: false,
   })
     .sort({ createdAt: -1 })
@@ -44,42 +48,41 @@ module.exports.create = async (req, res) => {
   const user = res.locals.user;
   const { content, percent } = req.body;
 
-
   if (!content || percent === undefined) {
     req.flash("error", "Vui lòng nhập đầy đủ thông tin");
     return res.redirect(`/progress/freelancer/${projectId}`);
   }
 
-  // 2. Kiểm tra quyền + trạng thái
   const project = await Project.findOne({
     _id: projectId,
-    freelancerId: user._id,
-    status: "in_progress",
+    acceptedFreelancerId: user._id,
+    status: "IN_PROGRESS",
     deleted: false,
   });
 
   if (!project) {
-    req.flash("error", "Không thể cập nhật tiến độ cho công việc này");
+    req.flash("error", "Không thể cập nhật tiến độ");
     return res.redirect("/freelancer/jobs");
   }
 
-  // 3. Khóa khi đã hoàn thành
-  if (project.progressPercent >= 100) {
-    req.flash("info", "Công việc đã hoàn thành");
-    return res.redirect(`/progress/freelancer/${projectId}`);
-  }
-
-  // 4. Tạo tiến độ
-  await ProjectProgress.create({
-    project: projectId,
+  const progress = await ProjectProgress.create({
+    projectId: projectId, // ✅ FIX LỖI VALIDATION
     freelancerId: user._id,
     content,
     percent,
   });
 
-  // 5. Đồng bộ % project
   await Project.findByIdAndUpdate(projectId, {
     progressPercent: percent,
+  });
+
+  // SOCKET EMIT → ROOM PROJECT
+  _io.to(projectId).emit("SERVER_RETURN_PROGRESS", {
+    projectId,
+    freelancerName: user.fullName,
+    content,
+    percent,
+    createdAt: progress.createdAt,
   });
 
   req.flash("success", "Đã cập nhật tiến độ");
@@ -90,6 +93,9 @@ module.exports.create = async (req, res) => {
  * Hirer xem tiến độ
  */
 module.exports.hirerView = async (req, res) => {
+  // GẮN SOCKET – GIỐNG CHAT
+  progressSocket(res);
+
   const { projectId } = req.params;
   const user = res.locals.user;
 
@@ -109,7 +115,7 @@ module.exports.hirerView = async (req, res) => {
   }
 
   const progressList = await ProjectProgress.find({
-    project: projectId,
+    projectId: project._id,
     deleted: false,
   })
     .sort({ createdAt: -1 })
