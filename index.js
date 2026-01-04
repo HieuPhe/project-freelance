@@ -28,6 +28,19 @@ const server = http.createServer(app);
 const io = new Server(server);
 global._io = io;
 
+io.on("connection", (socket) => {
+  console.log("🔌 New socket connected:", socket.id);
+
+  socket.on("join-user-room", (userId) => {
+    if (!userId) return;
+    socket.join(`user_${userId}`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("❌ Socket disconnected:", socket.id);
+  });
+});
+
 app.use(methodOverride("_method"));
 
 app.use(bodyParser.urlencoded({ extended: false }));

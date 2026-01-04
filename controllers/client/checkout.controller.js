@@ -2,6 +2,7 @@ const Cart = require("../../models/cart.model");
 const Project = require("../../models/project.model");
 const Proposal = require("../../models/proposal.model");
 const User = require("../../models/user.model");
+const Notification = require("../../models/notification.model");
 
 // [GET] /checkout
 module.exports.index = async (req, res) => {
@@ -83,7 +84,7 @@ module.exports.proposal = async (req, res) => {
 
     const proposalInfo = {
       cart_id: cartId,
-      freelancerId: user._id, 
+      freelancerId: user._id,
       userInfo: userInfo,
       projects: projects,
       status: "SUBMITTED",
@@ -102,6 +103,41 @@ module.exports.proposal = async (req, res) => {
         projects: [],
       }
     );
+
+    // ===== SOCKET NOTIFICATION: FREELANCER GỬI PROPOSAL =====
+    const firstProjectId = projects[0]?.project_id;
+
+    if (firstProjectId && global._io) {
+      const project = await Project.findOne({
+        _id: firstProjectId,
+        deleted: false,
+      });
+
+      if (project && project.hirerId) {
+        const hirerId = project.hirerId.toString();
+
+        console.log("🔔 EMIT NOTIFICATION TO HIRER:", hirerId);
+
+        global._io.to(`user_${hirerId}`).emit("NOTIFICATION_NEW", {
+          type: "PROPOSAL_NEW",
+          title: "Có đề xuất mới",
+          content: `${user.fullName} đã gửi đề xuất cho công việc "${project.title}"`,
+          projectId: project._id,
+          fromUser: user._id,
+          createdAt: new Date(),
+        });
+      }
+    }
+
+    await Notification.create({
+      userId: hirerId,
+      type: "PROPOSAL_NEW",
+      title: "Có đề xuất mới",
+      content: `${user.fullName} đã gửi đề xuất cho công việc "${project.title}"`,
+      projectId: project._id,
+      fromUser: user._id,
+      isRead: false,
+    });
 
     res.redirect(`/checkout/success/${proposal.id}`);
   } catch (error) {
@@ -126,6 +162,8 @@ module.exports.success = async (req, res) => {
       project.projectInfo = projectInfo;
     }
   }
+
+  console.log(proposal);
 
   res.render("client/pages/checkout/success", {
     pageTitle: "Gửi đề xuất thành công",

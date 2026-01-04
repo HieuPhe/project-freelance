@@ -1,6 +1,7 @@
 const Project = require("../../models/project.model");
 const Proposal = require("../../models/proposal.model");
 
+
 // [GET] /hirer/projects
 // Danh sách công việc của hirer hiện tại
 module.exports.myProjects = async (req, res) => {
@@ -94,6 +95,23 @@ module.exports.acceptProposal = async (req, res) => {
   project.acceptedFreelancerId = proposal.freelancerId;
   await project.save();
 
+  // 🔔 Thông báo cho freelancer khi được chấp nhận
+  const notification = await Notification.create({
+    userId: proposal.freelancerId,
+    title: "Đề xuất được chấp nhận",
+    content: `Đề xuất của bạn cho công việc "${project.title}" đã được chấp nhận`,
+    link: `/freelancer/jobs`,
+  });
+
+  if (global._io) {
+    global._io.to(`user_${proposal.freelancerId}`).emit("new-notification", {
+      title: notification.title,
+      content: notification.content,
+      link: notification.link,
+      createdAt: notification.createdAt,
+    });
+  }
+
   req.flash("success", "Đã chấp nhận đề xuất!");
   return res.redirect("/hirer/projects/" + projectId + "/proposals");
 };
@@ -128,6 +146,23 @@ module.exports.rejectProposal = async (req, res) => {
 
   proposal.status = "REJECTED";
   await proposal.save();
+
+  // 🔔 Thông báo cho freelancer khi bị từ chối
+   const notification = await Notification.create({
+    userId: proposal.freelancerId,
+    title: "Đề xuất bị từ chối",
+    content: "Đề xuất của bạn đã bị từ chối",
+    link: "/freelancer/proposals",
+  });
+
+  if (global._io) {
+    global._io.to(`user_${proposal.freelancerId}`).emit("new-notification", {
+      title: notification.title,
+      content: notification.content,
+      link: notification.link,
+      createdAt: notification.createdAt,
+    });
+  }
 
   req.flash("success", "Đã từ chối đề xuất!");
   return res.redirect("/hirer/projects/" + projectId + "/proposals");
@@ -237,7 +272,6 @@ module.exports.history = async (req, res) => {
   });
 };
 
-
 // [POST] /hirer/projects/:projectId/complete
 module.exports.completeProject = async (req, res) => {
   try {
@@ -268,6 +302,25 @@ module.exports.completeProject = async (req, res) => {
 
     project.status = "CLOSED";
     await project.save();
+
+    // 🔔 Thông báo cho freelancer khi công việc hoàn thành
+    const notification = await Notification.create({
+      userId: project.acceptedFreelancerId,
+      title: "Công việc đã hoàn thành",
+      content: `Hirer đã hoàn thành "${project.title}"`,
+      link: "/freelancer/history",
+    });
+
+    if (global._io) {
+      global._io
+        .to(`user_${project.acceptedFreelancerId}`)
+        .emit("new-notification", {
+          title: notification.title,
+          content: notification.content,
+          link: notification.link,
+          createdAt: notification.createdAt,
+        });
+    }
 
     req.flash("success", "Đã đánh dấu hoàn thành công việc!");
     return res.redirect("/hirer/jobs");

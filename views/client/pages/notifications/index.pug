@@ -1,0 +1,18 @@
+extends ../../layouts/default.pug
+
+block main
+  .container.mt-4
+    h3 Thông báo
+
+    if notifications.length === 0
+      p.text-muted Bạn chưa có thông báo nào
+    else
+      ul.list-group
+        each n in notifications
+          li.list-group-item(class=!n.isRead ? "font-weight-bold" : "")
+            div #{n.title}
+            small.text-muted #{n.content}
+
+            if !n.isRead
+              form(method="POST", action=`/notifications/${n._id}/read`)
+                button.btn.btn-sm.btn-link Đánh dấu đã đọc

@@ -10,12 +10,7 @@ block main
             // HEADER
             .user-profile-header
               .user-avatar
-                - const nameParts = (user.fullName || "").split(" ")
-                - var initials = ""
-                - for (var i = 0; i < nameParts.length && i < 2; i++) {
-                -   initials += nameParts[i].charAt(0).toUpperCase()
-                - }
-                span #{initials || "U"}
+                img(src=(user.avatar ? user.avatar : "/client/images/avatar.png"))
 
               .user-basic
                 h1.user-name #{user.fullName}

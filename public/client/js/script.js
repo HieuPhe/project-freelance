@@ -1,3 +1,4 @@
+
 // Show Alert
 const showAlert = document.querySelector("[show-alert]");
 if (showAlert) {
@@ -57,3 +58,25 @@ document.addEventListener("DOMContentLoaded", function () {
     track.scrollLeft -= getStep();
   });
 });
+
+// Socket IO thông báo
+
+window.addEventListener("NEW_NOTIFICATION", (e) => {
+  const data = e.detail;
+  showNotificationUI(data);
+});
+
+function showNotificationUI(data) {
+  const alert = document.createElement("div");
+  alert.className = "alert alert-info alert-dismissible fade show";
+  alert.innerHTML = `
+    <strong>${data.title}</strong><br>
+    ${data.message}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  `;
+
+  document.body.prepend(alert);
+
+  setTimeout(() => alert.remove(), 4000);
+}
+

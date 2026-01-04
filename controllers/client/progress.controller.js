@@ -76,14 +76,43 @@ module.exports.create = async (req, res) => {
     progressPercent: percent,
   });
 
-  // SOCKET EMIT → ROOM PROJECT
-  _io.to(projectId).emit("SERVER_RETURN_PROGRESS", {
+  // SOCKET EMIT → PROJECT ROOM (phần này giữ nếu bạn cần realtime progress)
+  global._io.to(projectId).emit("SERVER_RETURN_PROGRESS", {
     projectId,
     freelancerName: user.fullName,
     content,
     percent,
     createdAt: progress.createdAt,
   });
+
+  // ===============================
+  // SOCKET NOTIFICATION → HIRER
+  // ===============================
+  const hirerId = project.hirerId.toString();
+
+  global._io.to(`user_${hirerId}`).emit("SERVER_NEW_NOTIFICATION", {
+    type: "PROGRESS_UPDATE",
+    projectId,
+    message: `${user.fullName} đã cập nhật tiến độ (${percent}%)`,
+    createdAt: new Date(),
+  });
+
+  // 🔔 Thông báo cho hirer khi freelancer cập nhật tiến độ
+  const notification = await Notification.create({
+    userId: project.hirerId,
+    title: "Cập nhật tiến độ công việc",
+    content: `Freelancer đã cập nhật tiến độ cho "${project.title}"`,
+    link: "/hirer/jobs",
+  });
+
+  if (global._io) {
+    global._io.to(`user_${project.hirerId}`).emit("new-notification", {
+      title: notification.title,
+      content: notification.content,
+      link: notification.link,
+      createdAt: notification.createdAt,
+    });
+  }
 
   req.flash("success", "Đã cập nhật tiến độ");
   return res.redirect(`/progress/freelancer/${projectId}`);

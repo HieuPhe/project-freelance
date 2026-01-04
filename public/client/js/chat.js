@@ -2,10 +2,36 @@ import * as Popper from "https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm
 
 import { FileUploadWithPreview } from "https://unpkg.com/file-upload-with-preview/dist/index.js";
 // file-upload-with-preview
-const upload = new FileUploadWithPreview("upload-images", {
-  multiple: true,
-  maxFileCount: 5,
-});
+// const upload = new FileUploadWithPreview("upload-images", {
+//   multiple: true,
+//   maxFileCount: 5,
+// });
+
+(function () {
+  // ==== SAFE GUARD ====
+  if (typeof window === "undefined") return;
+  if (!window.socket) {
+    console.log("Socket not ready in chat.js");
+    return;
+  }
+
+  // ==== FILE UPLOAD FIX ====
+  if (
+    typeof FileUploadWithPreview !== "undefined" &&
+    document.getElementById("upload-images")
+  ) {
+    new FileUploadWithPreview("upload-images");
+  } else {
+    console.log("Skip FileUploadWithPreview init");
+  }
+
+  // ==== SOCKET LISTENER (KHÔNG ĐỔI LOGIC) ====
+  socket.on("SERVER_SEND_NOTIFICATION", (data) => {
+    console.log("📢 Notification received:", data);
+  });
+
+  // các đoạn chat cũ của bạn để nguyên bên dưới
+})();
 
 // CLIENT_SEND_MESSAGE
 const formSendData = document.querySelector(".chat .inner-form");
@@ -174,10 +200,9 @@ if (elementListTyping) {
 
 // End SERVER_RETURN_TYPING
 
-
 // Preview Full Image
 const bodyChatPreviewImage = document.querySelector(".chat .inner-body");
-if(bodyChatPreviewImage) {
+if (bodyChatPreviewImage) {
   const gallery = new Viewer(bodyChatPreviewImage);
 }
 // End  Preview Full Image

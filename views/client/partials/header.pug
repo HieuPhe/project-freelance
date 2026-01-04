@@ -33,8 +33,25 @@ header.header
               a(href="/") Trang chủ
             li 
               a(href="/projects") Công việc
-            
+
+          ul.nav-right  
             if user
+
+              .li.nav-item.dropdown#notify-wrapper
+                a.nav-link.dropdown-toggle(href="javascript:void(0)" data-toggle="dropdown")
+                  i.fas.fa-bell
+                  span.badge.badge-danger#notify-badge(style="display:none") 0
+
+                .dropdown-menu.dropdown-menu-right#notify-dropdown(style="width:320px")
+                  h6.dropdown-header Thông báo
+                  .dropdown-divider
+
+                  // ✅ THÊM DUY NHẤT DÒNG NÀY
+                  ul.list-unstyled.mb-0#notify-list
+
+                  // ⛔ GIỮ NGUYÊN (JS sẽ ẩn đi khi có thông báo)
+                  .notify-empty.text-muted.text-center.py-2 Chưa có thông báo
+
               li.dropdown
                 a(
                   href="javascript:;"
@@ -42,7 +59,8 @@ header.header
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
-                ) #{user.fullName}
+                ) 
+                  img(src=(user.avatar ? user.avatar : "/client/images/avatar.png"))
 
                 .dropdown-menu.dropdown-menu-right
                   a.dropdown-item(href="/user/info") Hồ sơ cá nhân

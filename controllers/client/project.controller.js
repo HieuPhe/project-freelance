@@ -4,6 +4,7 @@ const ProjectCategory = require("../../models/project-category.model");
 const projectCategoryHelper = require("../../helpers/project-category");
 const paginationHelper = require("../../helpers/pagination");
 
+
 // [GET] /client/projects
 module.exports.index = async (req, res) => {
   // Phân trang
@@ -41,6 +42,7 @@ module.exports.index = async (req, res) => {
 
 // [GET] /client/projects/:slugProject
 module.exports.detail = async (req, res) => {
+
   try {
     const find = {
       deleted: false,
@@ -65,7 +67,7 @@ module.exports.detail = async (req, res) => {
       status: "OPEN",
     })
       .sort({ position: "desc" })
-      .limit(3)
+      .limit(3);
 
     res.render("client/pages/projects/detail", {
       pageTitle: project.title,
@@ -80,6 +82,7 @@ module.exports.detail = async (req, res) => {
 
 // [GET] /client/projects/:slugCategory
 module.exports.category = async (req, res) => {
+
   try {
     // Danh mục hiện tại
     const currentCategory = await ProjectCategory.findOne({
@@ -141,4 +144,3 @@ module.exports.category = async (req, res) => {
     res.redirect(`/projects`);
   }
 };
-

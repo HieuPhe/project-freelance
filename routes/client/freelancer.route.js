@@ -6,6 +6,8 @@ const requireUser = require("../../middlewares/client/user.middleware");
 
 router.get("/proposals", requireUser.requireFreelancer, controller.myProposals);
 
+router.get("/proposals/delete/:projectId", requireUser.requireFreelancer, controller.delete);
+
 // Công việc đang làm
 router.get("/jobs", requireUser.requireFreelancer, controller.myJobs);
 

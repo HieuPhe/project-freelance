@@ -22,7 +22,6 @@ const proposalSchema = new mongoose.Schema(
     userInfo: {
       fullName: String,
       email: String,
-      cv: String
     },
 
     // Danh sách công việc trong đề xuất

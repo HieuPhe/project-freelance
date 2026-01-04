@@ -5,6 +5,7 @@ const paginationHelper = require("../../helpers/pagination-2");
 
 // [GET] /client/home
 module.exports.index = async (req, res) => {
+
   const countFeatured = await Project.countDocuments({
     featured: "1",
     deleted: false,

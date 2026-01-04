@@ -1,4 +1,7 @@
 const Proposal = require("../../models/proposal.model");
+const Project = require("../../models/project.model");
+const Notification = require("../../models/notification.model");
+
 
 // [GET] /freelancer/proposals
 module.exports.myProposals = async (req, res) => {
@@ -15,6 +18,37 @@ module.exports.myProposals = async (req, res) => {
     pageTitle: "Đề xuất của tôi",
     proposals,
   });
+};
+
+// [GET] /freelancer/proposals/delete/projectId
+module.exports.delete = async (req, res) => {
+  const proposalId = await Proposal.findById({
+    freelancerId: user._id,
+    deleted: false,
+    status: "SUBMITTED",
+  })
+    .sort({ createdAt: -1 })
+    .populate("projects.project_id");
+
+  const projectId = await Project.findById({
+    freelancerId: user._id,
+    deleted: false,
+  })
+    .sort({ createdAt: -1 })
+    .populate("projects.project_id");
+
+  await Proposal.updateOne(
+    {
+      _id: proposalId,
+    },
+    {
+      $pull: { projects: { project_id: projectId } },
+    }
+  );
+
+  req.flash("success", "Đã xóa đề xuất thành công");
+
+  res.redirect("/freelancer/proposals");
 };
 
 // [GET] /freelancer/jobs

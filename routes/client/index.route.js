@@ -4,24 +4,23 @@ const infoUserMiddleware = require("../../middlewares/client/user.middleware");
 const settingGeneralMiddleware = require("../../middlewares/client/setting.middleware");
 const authMiddleware = require("../../middlewares/client/auth.middlewares");
 
-
 const homeRoute = require("./home.route");
 const projectRoute = require("./project.route");
 const searchRoute = require("./search.route");
 const cartRoute = require("./cart.route");
 const checkoutRoute = require("./checkout.route");
 const userRoute = require("./user.route");
-const freelancerRoute  = require("./freelancer.route");
-const hirerRoute  = require("./hirer.route");
-const chatRoute  = require("./chat.route");
-const progressRoute  = require("./progess.route");
-
+const freelancerRoute = require("./freelancer.route");
+const hirerRoute = require("./hirer.route");
+const notificationRoute = require("./notification.route");
+const chatRoute = require("./chat.route");
+const progressRoute = require("./progess.route");
 
 module.exports = (app) => {
   app.use(categoryMiddleware.category);
-  
+
   app.use(cartMiddleware.cartId);
-  
+
   app.use(infoUserMiddleware.infoUser);
 
   app.use(settingGeneralMiddleware.settingGeneral);
@@ -39,11 +38,12 @@ module.exports = (app) => {
   app.use("/user", userRoute);
 
   app.use("/freelancer", freelancerRoute);
-  
+
   app.use("/hirer", hirerRoute);
 
-  app.use("/chat",authMiddleware.requireAuth, chatRoute);
+  app.use("/client", notificationRoute);
 
-  app.use("/progress",authMiddleware.requireAuth, progressRoute);
+  app.use("/chat", authMiddleware.requireAuth, chatRoute);
 
+  app.use("/progress", authMiddleware.requireAuth, progressRoute);
 };
