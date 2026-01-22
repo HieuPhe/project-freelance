@@ -10,9 +10,24 @@ block main
       ul.list-group
         each n in notifications
           li.list-group-item(class=!n.isRead ? "font-weight-bold" : "")
+            
+            // ICON / LABEL THEO TYPE
+            if n.type === 'PROPOSAL_ACCEPTED'
+              span.text-success.mr-1 ✔
+            else if n.type === 'PROPOSAL_REJECTED'
+              span.text-danger.mr-1 ✖
+            else if n.type === 'PROGRESS_UPDATE'
+              span.text-info.mr-1 ⟳
+            else if n.type === 'JOB_COMPLETED'
+              span.text-primary.mr-1 ★
+
+            // TITLE
             div #{n.title}
+
+            // CONTENT
             small.text-muted #{n.content}
 
             if !n.isRead
               form(method="POST", action=`/notifications/${n._id}/read`)
                 button.btn.btn-sm.btn-link Đánh dấu đã đọc
+

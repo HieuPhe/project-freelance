@@ -1,193 +1,313 @@
-/* Header */
+/* =====================================================
+   HEADER STYLES
+===================================================== */
 .header {
-  background: #202020;
-  padding: 12px 0;
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 999;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: #111827; /* Cùng tông màu tối với Sidebar */
+  z-index: 2000;
+  padding: 0 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.header .inner-logo a {
-  font-size: 22px;
-  font-weight: 700;
+.header .container-fluid, 
+.header .row {
+  height: 100%;
+}
+
+/* Logo bên trái */
+.brand-text {
   color: #ffffff;
-  letter-spacing: 0.5px;
-  text-decoration: none;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
-/* Nút toggle sidebar */
-.sidebar-toggle {
+.brand-dot {
+  color: #4f46e5; /* Điểm nhấn màu tím xanh */
+}
+
+/* User Dropdown Button */
+#userMenuButton {
+  background: transparent;
   border: none;
-  outline: none;
-  background: #151515;
-  color: #e5e7eb;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 10px;
+  box-shadow: none !important;
+}
+
+#userMenuButton::after {
+  display: none; /* Ẩn mũi tên mặc định */
+}
+
+.user-info {
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.2;
+}
+
+.user-name {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+.user-avatar {
   width: 36px;
   height: 36px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+
+/* =====================================================
+   SIDEBAR LAYOUT
+===================================================== */
+.sidebar {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  width: 270px;
+  height: calc(100vh - 64px);
+  background: linear-gradient(180deg, #0f172a, #111827);
+  z-index: 1500;
+  transition: width 0.35s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+
+/* =====================================================
+   SIDEBAR HEADER
+===================================================== */
+.sidebar-header {
+  height: 70px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-logo img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Toggle */
+.sidebar-toggler {
+  width: 32px;
+  height: 32px;
   border-radius: 6px;
+  border: none;
+  background: #e5e7eb;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  font-size: 18px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
-  transition: 0.15s ease;
 }
 
-.sidebar-toggle:hover {
-  background: #2a2a2a;
-  transform: translateY(-1px);
+.sidebar-toggler span {
+  transition: transform 0.3s ease;
 }
 
-/* Avatar */
-.header img {
-  border: 2px solid #fff2;
-  transition: 0.2s;
+.sidebar.collapsed .sidebar-toggler span {
+  transform: rotate(180deg);
 }
 
-.header img:hover {
-  border-color: #fff5;
+
+/* =====================================================
+   NAV CONTAINER
+===================================================== */
+.sidebar-nav {
+  padding: 8px;
 }
 
-/* End Header */
-
-/* Body */
-.body .sider {
-  width: 150px;
-  background: #323232;
-  color: #fff;
-  height: calc(100vh - 56px);
-  position: fixed;
-  top: 56px;
-  left: 0;
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.body .main {
-  margin: 15px;
-  position: relative;
-  left: 150px;
-  width: calc(100% - 180px);
+.primary-nav {
+  overflow-y: auto;
+  max-height: calc(100vh - 210px);
 }
-/* End Body */
 
-/* Sider */
-.sider {
-  width: 230px;
-  background: #0f172a;
-  color: #e5e7eb;
-  padding: 16px 12px;
-  border-radius: 0 16px 16px 0;
-  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.55);
 
-  position: fixed;
-  top: 60px; /* gần bằng chiều cao header */
-  left: 0;
-  z-index: 100;
+/* =====================================================
+   NAV ITEM
+===================================================== */
+.nav-item {
+  margin-bottom: 4px;
+}
 
-  min-height: calc(100vh - 60px);
+.nav-link {
   display: flex;
-  flex-direction: column;
-
-  transform: translateX(0);
-  transition: transform 0.25s ease;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  color: #cbd5f5;
+  text-decoration: none;
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
-/* Vùng nội dung chính (trong .main) */
+.nav-link:hover {
+  background: rgba(255,255,255,0.08);
+  color: #ffffff;
+}
+
+.nav-label {
+  white-space: nowrap;
+}
+
+/* Active */
+.nav-link.active {
+  background: linear-gradient(135deg, #4f46e5, #22c55e);
+  color: #ffffff;
+}
+
+/* Tắt caret Bootstrap */
+.nav-link.dropdown-toggle::after {
+  display: none !important;
+}
+
+
+/* =====================================================
+   DROPDOWN (JS CONTROLLED HEIGHT)
+===================================================== */
+.dropdown-container {
+  position: relative;
+}
+
+.dropdown-container > .nav-link {
+  cursor: pointer;
+}
+
+.dropdown-icon {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+}
+
+/* Icon rotate */
+.dropdown-container.open > .nav-link .dropdown-icon {
+  transform: rotate(180deg);
+}
+
+/* FIX LỖI Ô TRẮNG: Reset style của Bootstrap cho dropdown trong sidebar */
+.sidebar .dropdown-menu {
+  display: block; /* Ghi đè display:none */
+  height: 0;
+  overflow: hidden;
+  transition: height 0.3s ease;
+  
+  /* Reset Bootstrap */
+  position: static; 
+  float: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  min-width: 100%;
+}
+
+.dropdown-menu .nav-link {
+  padding: 10px 12px 10px 45px; /* Thêm padding trái để menu con thụt lề đẹp hơn */
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   COLLAPSED MODE (HOVER DROPDOWN)
+===================================================== */
+.sidebar.collapsed .nav-label,
+.sidebar.collapsed .dropdown-icon {
+  display: none;
+}
+
+/* Menu bay ra ngoài khi thu nhỏ */
+.sidebar.collapsed .dropdown-menu {
+  position: absolute;
+  top: 0;
+  left: 80px;
+  width: 200px;
+  background: #0f172a !important; /* Phải có màu nền khi bay ra ngoài */
+  border-radius: 0 12px 12px 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  height: auto !important;
+  opacity: 0;
+  pointer-events: none;
+  padding: 8px 0 !important;
+}
+
+.sidebar.collapsed .dropdown-menu .nav-link {
+    padding: 10px 15px;
+}
+
+/* Hover để hiện */
+.sidebar.collapsed .dropdown-container:hover > .dropdown-menu {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+.primary-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.primary-nav::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+}
+
+
+/* ================= BOTTOM ================= */
+.secondary-nav {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+}
+
+
+/* ================= MAIN CONTENT ================= */
 .main {
-  background: #f3f4f6;
-  border-radius: 16px 0 0 0;
+  margin-left: 270px;
   padding: 24px;
-  min-height: calc(100vh - 60px);
+  padding-top: 72px;
+
+  min-height: 100vh;
+  background: #f3f4f6;
+
+  transition: margin-left 0.4s ease;
 }
 
-/* Tiêu đề trang */
+.sidebar.collapsed ~ .main {
+  margin-left: 85px;
+}
+
+/* ================= PAGE TITLE ================= */
 .main h1 {
   font-size: 35px;
   font-weight: 700;
   color: #111827;
   margin-bottom: 18px;
 }
-
-/* ====== STYLE MENU BÊN TRONG SIDEBAR ====== */
-.sider .inner-menu ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.sider .inner-menu ul li {
-  border-bottom: 2px solid #fff2;
-}
-
-.sider .inner-menu li + li {
-  margin-top: 4px;
-}
-
-.sider .inner-menu a {
-  display: block;
-  padding: 10px 12px;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #cbd5f5;
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
-
-  transition: background 0.2s ease, color 0.2s ease, transform 0.12s ease,
-    box-shadow 0.2s ease;
-}
-
-/* Thanh highlight bên trái */
-.sider .inner-menu a::before {
-  content: "";
-  position: absolute;
-  top: 6px;
-  bottom: 6px;
-  left: 0;
-  width: 3px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #22c55e, #4ade80);
-  opacity: 0;
-  transform: translateX(-6px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-/* Hover */
-.sider .inner-menu a:hover {
-  background: rgba(148, 163, 184, 0.16);
-  color: #f9fafb;
-  transform: translateX(2px);
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.42);
-}
-
-.sider .inner-menu a:hover::before {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Nếu bạn render class .active cho link hiện tại */
-.sider .inner-menu a.active {
-  background: linear-gradient(135deg, #4f46e5, #22c55e);
-  color: #ffffff;
-  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.45);
-}
-
-.sider .inner-menu a.active::before {
-  opacity: 0;
-}
-
-/* ====== TRẠNG THÁI ĐÓNG / MỞ ====== */
-.sider.is-closed {
-  transform: translateX(-100%);
-}
-
-.main.sidebar-closed {
-  left: 0;
-  width: 100%;
-  right: 0;
-}
-/* End Sider */
 
 /* Show Alert */
 [show-alert] {

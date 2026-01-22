@@ -2,17 +2,18 @@ const Notification = require("../../models/notification.model");
 
 // [GET] /notifications
 module.exports.index = async (req, res) => {
-  const user = res.locals.user;
-
-  if (!user) return res.json([]);
+  const userId = res.locals.user.id;
 
   const notifications = await Notification.find({
-    userId: user._id,
-    deleted: false,
-  }).sort({ createdAt: -1 });
+    receiver_id: userId
+  })
+    .sort({ createdAt: -1 })
+    .limit(10)
+    .lean();
 
   res.json(notifications);
 };
+
 
 
 // [POST] /client/notifications/:id/read

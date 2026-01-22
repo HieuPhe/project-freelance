@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Project = require("../../models/project.model");
 const ProjectProgress = require("../../models/project-progress.model");
+const Notification = require("../../models/notification.model");
+
 
 const progressSocket = require("../../sockets/client/progress.socket");
 
@@ -85,31 +87,24 @@ module.exports.create = async (req, res) => {
     createdAt: progress.createdAt,
   });
 
-  // ===============================
-  // SOCKET NOTIFICATION → HIRER
-  // ===============================
-  const hirerId = project.hirerId.toString();
-
-  global._io.to(`user_${hirerId}`).emit("SERVER_NEW_NOTIFICATION", {
-    type: "PROGRESS_UPDATE",
-    projectId,
-    message: `${user.fullName} đã cập nhật tiến độ (${percent}%)`,
-    createdAt: new Date(),
-  });
-
-  // 🔔 Thông báo cho hirer khi freelancer cập nhật tiến độ
+  // sau khi tạo progress xong
   const notification = await Notification.create({
     userId: project.hirerId,
+    type: "PROGRESS_UPDATE",
     title: "Cập nhật tiến độ công việc",
-    content: `Freelancer đã cập nhật tiến độ cho "${project.title}"`,
-    link: "/hirer/jobs",
+    content: `${user.fullName} đã cập nhật tiến độ (${percent}%)`,
+    projectId: project._id,
+    fromUser: user._id,
   });
 
   if (global._io) {
-    global._io.to(`user_${project.hirerId}`).emit("new-notification", {
+    global._io.to(`user_${project.hirerId}`).emit("NOTIFICATION_NEW", {
+      _id: notification._id,
+      type: notification.type,
       title: notification.title,
       content: notification.content,
-      link: notification.link,
+      projectId: project._id,
+      isRead: false,
       createdAt: notification.createdAt,
     });
   }

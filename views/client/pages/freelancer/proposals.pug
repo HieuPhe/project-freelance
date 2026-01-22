@@ -14,7 +14,7 @@ block main
             th Deadline
             th Trạng thái
             th Ngày gửi
-            th Thao tác
+            //- th Thao tác
         tbody
           each item, index in proposals
             - var p = item.projects && item.projects.length ? item.projects[0] : null;
@@ -57,13 +57,13 @@ block main
               // NGÀY GỬI
               td #{item.createdAt.toLocaleDateString("vi-VN")}
 
-              if item.status === "SUBMITTED"
-                td 
-                  a(
-                    href=`/proposal/delete/${p.project_id.slug}`
-                    class="btn btn-light btn-sm text-danger border"
-                    title="Xóa đề xuất"
-                  )
-                    i.fas.fa-trash
+              //- if item.status === "SUBMITTED"
+              //-   td 
+              //-     a(
+              //-       href=`/proposal/delete/${p.project_id.slug}`
+              //-       class="btn btn-light btn-sm text-danger border"
+              //-       title="Xóa đề xuất"
+              //-     )
+              //-       i.fas.fa-trash
     else
       .alert.alert-info.mt-3 Chưa có đề xuất nào.

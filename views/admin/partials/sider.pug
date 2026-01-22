@@ -1,26 +1,80 @@
-.sider 
-  .inner-menu 
-    ul 
-      li 
-        a(href=`${prefixAdmin}/dashboard`) Tổng quan
-      if(role.permissions.includes("project_view"))
-        li 
-          a(href=`${prefixAdmin}/projects`) Công việc
-      if(role.permissions.includes("project-category_view"))
-        li 
-          a(href=`${prefixAdmin}/projects-category`) Danh mục 
-      if(role.permissions.includes("roles_view"))
-        li 
-          a(href=`${prefixAdmin}/roles`) Nhóm quyền
-      if(role.permissions.includes("roles_permissions"))     
-        li 
-          a(href=`${prefixAdmin}/roles/permissions`) Phân quyền 
-      if(role.permissions.includes("accounts_view"))
-        li 
-          a(href=`${prefixAdmin}/accounts`) Tài khoản
-      li 
-        a(href=`${prefixAdmin}/users`) Người dùng
-      if(role.permissions.includes("setting-general"))
-        li 
-          a(href=`${prefixAdmin}/settings/general`) Cài đặt chung
+aside.sidebar
+  header.sidebar-header
+    a.header-logo(href=`${prefixAdmin}/dashboard`)
+      img(src="/admin/images/logo.png" alt="Admin")
+    button.sidebar-toggler
+      span.material-symbols-rounded chevron_left
 
+  nav.sidebar-nav
+    ul.nav-list.primary-nav
+
+      li.nav-item
+        a.nav-link(href=`${prefixAdmin}/dashboard`)
+          span.material-symbols-rounded dashboard
+          span.nav-label Tổng quan
+
+      if role.permissions.includes("project_view") || role.permissions.includes("project-category_view")
+        li.nav-item.dropdown-container
+          a.nav-link.dropdown-toggle(href="#")
+            span.material-symbols-rounded work
+            span.nav-label Công việc
+            span.dropdown-icon.material-symbols-rounded keyboard_arrow_down
+
+          ul.dropdown-menu
+            if role.permissions.includes("project_view")
+              li.nav-item
+                a.nav-link.dropdown-link(href=`${prefixAdmin}/projects`) Công việc
+
+            if role.permissions.includes("project-category_view")
+              li.nav-item
+                a.nav-link.dropdown-link(href=`${prefixAdmin}/projects-category`) Danh mục
+
+      if role.permissions.includes("roles_view") || role.permissions.includes("roles_permissions")
+        li.nav-item.dropdown-container
+          a.nav-link.dropdown-toggle(href="#")
+            span.material-symbols-rounded security
+            span.nav-label Phân quyền
+            span.dropdown-icon.material-symbols-rounded keyboard_arrow_down
+
+          ul.dropdown-menu
+            if role.permissions.includes("roles_view")
+              li.nav-item
+                a.nav-link.dropdown-link(href=`${prefixAdmin}/roles`) Nhóm quyền
+
+            if role.permissions.includes("roles_permissions")
+              li.nav-item
+                a.nav-link.dropdown-link(href=`${prefixAdmin}/roles/permissions`) Phân quyền
+
+      if role.permissions.includes("accounts_view")
+        li.nav-item.dropdown-container
+          a.nav-link.dropdown-toggle(href="#")
+            span.material-symbols-rounded manage_accounts
+            span.nav-label Quản lý người dùng
+            span.dropdown-icon.material-symbols-rounded keyboard_arrow_down
+
+          ul.dropdown-menu
+            if role.permissions.includes("accounts_view")
+              li.nav-item
+                a.nav-link.dropdown-link(href=`${prefixAdmin}/accounts`) Tài khoản
+
+            li.nav-item
+              a.nav-link.dropdown-link(href=`${prefixAdmin}/users`) Người dùng
+
+      if role.permissions.includes("setting-general")
+        li.nav-item
+          a.nav-link(href=`${prefixAdmin}/settings/general`)
+            span.material-symbols-rounded settings
+            span.nav-label Cài đặt chung
+
+    ul.nav-list.secondary-nav
+      li.nav-item
+        a.nav-link(href=`${prefixAdmin}/my-account`)
+          span.material-symbols-rounded help
+          span.nav-label Thông tin người dùng
+
+      li.nav-item
+        a.nav-link(href=`${prefixAdmin}/auth/logout`)
+          span.material-symbols-rounded logout
+          span.nav-label Đăng xuất
+
+script(src="/admin/js/sidebar.js")

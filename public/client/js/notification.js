@@ -2,11 +2,44 @@ console.log("✅ notification.js loaded");
 
 /**
  * ================================
+ * HELPER: MAP LINK BY TYPE
+ * ================================
+ */
+function resolveNotificationLink(data) {
+  switch (data.type) {
+    case "PROPOSAL_CREATE":
+      return `/hirer/projects/${data.projectId}/proposals`;
+
+    case "PROPOSAL_ACCEPTED":
+      return `/freelancer/jobs`;
+
+    case "PROPOSAL_REJECTED":
+      return `/freelancer/proposals`;
+
+    case "PROGRESS_UPDATE":
+      return `/hirer/jobs`;
+
+    case "JOB_COMPLETED":
+      return `/freelancer/history`;
+
+    default:
+      return "javascript:void(0)";
+  }
+}
+
+/**
+ * ================================
  * SOCKET → FRONTEND EVENT
  * ================================
  */
 window.addEventListener("NEW_NOTIFICATION", function (e) {
   const data = e.detail;
+
+  // BẮT BUỘC PHẢI CÓ TYPE
+  if (!data || !data.type) {
+    console.warn("⚠️ Notification missing type:", data);
+    return;
+  }
 
   showToastNotification(data);
   addNotificationToDropdown(data);
@@ -23,8 +56,8 @@ function showToastNotification(data) {
   toast.className = "notify-toast";
 
   toast.innerHTML = `
-    <div class="notify-title">${data.title}</div>
-    <div class="notify-content">${data.message || data.content}</div>
+    <div class="notify-title">${data.title || "Notification"}</div>
+    <div class="notify-content">${data.message || data.content || ""}</div>
   `;
 
   document.body.appendChild(toast);
@@ -45,10 +78,12 @@ function showToastNotification(data) {
 let unreadCount = 0;
 
 function addNotificationToDropdown(data) {
-  const dropdown = document.getElementById("notify-dropdown");
+  const dropdown = document.getElementById("notify-list");
   if (!dropdown) return;
 
-  // tránh render trùng notification
+  console.log("🔔 Render notification:", data);
+
+  // Tránh render trùng
   if (data._id) {
     const exists = dropdown.querySelector(
       `.notify-item[data-id="${data._id}"]`
@@ -56,28 +91,28 @@ function addNotificationToDropdown(data) {
     if (exists) return;
   }
 
-  const empty = dropdown.querySelector(".notify-empty");
+  const empty = document.querySelector("#notify-dropdown .notify-empty");
   if (empty) empty.remove();
 
   const item = document.createElement("a");
-
-  // 🔴 QUAN TRỌNG: class + dataset để mark read
   item.className = `dropdown-item notify-item ${
     data.isRead ? "read" : "unread"
   }`;
-  item.dataset.id = data._id;
+  item.dataset.id = data._id || "";
 
-  item.href = data.projectId
-    ? `/hirer/projects/${data.projectId}/proposals`
-    : "javascript:void(0)";
+  item.href = resolveNotificationLink(data);
 
   item.innerHTML = `
-    <strong>${data.title}</strong>
-    <div style="font-size:13px">${data.message || data.content}</div>
+    <strong>${data.title || "Notification"}</strong>
+    <div style="font-size:13px">
+      ${data.message || data.content || ""}
+    </div>
     <small class="text-muted">${new Date().toLocaleString()}</small>
   `;
 
-  dropdown.prepend(item);
+  const li = document.createElement("li");
+  li.appendChild(item);
+  dropdown.prepend(li);
 }
 
 function increaseBadge() {
@@ -104,14 +139,16 @@ function renderBadge() {
  */
 document.addEventListener("DOMContentLoaded", async function () {
   try {
-    const res = await fetch("/notifications");
-    const list = await res.json();
+    const res = await fetch("/client");
+    if (!res.ok) throw new Error("Fetch notification failed");
 
+    const list = await res.json();
     if (!Array.isArray(list)) return;
 
     list.forEach((n) => {
       addNotificationToDropdown({
         _id: n._id,
+        type: n.type,              // ✅ CỰC KỲ QUAN TRỌNG
         title: n.title,
         content: n.content,
         projectId: n.projectId,
@@ -123,13 +160,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     renderBadge();
   } catch (err) {
-    console.log("Load notification error:", err);
+    console.error("❌ Load notification error:", err);
   }
 });
 
 /**
  * ================================
- * CLICK → MARK AS READ (BƯỚC 5)
+ * CLICK → MARK AS READ
  * ================================
  */
 document.addEventListener("click", async function (e) {
@@ -139,8 +176,9 @@ document.addEventListener("click", async function (e) {
   const notifyId = notifyItem.dataset.id;
   if (!notifyId) return;
 
-  // đã đọc thì bỏ qua
+  if (notifyItem.classList.contains("read")) return;
   if (notifyItem.dataset.loading === "true") return;
+
   notifyItem.dataset.loading = "true";
 
   try {
@@ -157,14 +195,14 @@ document.addEventListener("click", async function (e) {
     unreadCount = Math.max(unreadCount - 1, 0);
     renderBadge();
   } catch (error) {
-    console.error("Read notification error:", error);
+    console.error("❌ Read notification error:", error);
     delete notifyItem.dataset.loading;
   }
 });
 
 /**
  * ================================
- * REALTIME SYNC READ (BƯỚC 6)
+ * REALTIME SYNC READ
  * ================================
  */
 window.addEventListener("SYNC_NOTIFICATION_READ", function (e) {
@@ -185,38 +223,34 @@ window.addEventListener("SYNC_NOTIFICATION_READ", function (e) {
   }
 });
 
+/**
+ * ================================
+ * CLEAR ALL (OPTIONAL)
+ * ================================
+ */
 window.addEventListener("NOTIFICATION_CLEAR_ALL", function () {
   const items = document.querySelectorAll("#notify-dropdown .notify-item");
+
   items.forEach((item) => {
     item.classList.remove("unread");
     item.classList.add("read");
   });
 
-  const badge = document.getElementById("notify-badge");
-  if (badge) {
-    badge.innerText = "0";
-    badge.style.display = "none";
-  }
+  unreadCount = 0;
+  renderBadge();
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const wrapper = document.getElementById("notify-wrapper");
-  if (!wrapper) return;
-
-  wrapper.addEventListener("click", function () {
-    renderBadge(); // chỉ refresh UI, không đổi state DB
-  });
-});
-
+/**
+ * ================================
+ * MARK ALL READ – HOTKEY
+ * ================================
+ */
 document.addEventListener("keydown", async function (e) {
-  // Ctrl + Shift + M → mark all read (admin / power user)
   if (e.ctrlKey && e.shiftKey && e.key === "M") {
     try {
-      await fetch("/client/notifications/read-all", {
-        method: "POST",
-      });
+      await fetch("/client/read-all", { method: "POST" });
     } catch (err) {
-      console.error("Mark all read error:", err);
+      console.error("❌ Mark all read error:", err);
     }
   }
 });

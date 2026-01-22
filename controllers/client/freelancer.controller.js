@@ -1,6 +1,5 @@
 const Proposal = require("../../models/proposal.model");
 const Project = require("../../models/project.model");
-const Notification = require("../../models/notification.model");
 
 
 // [GET] /freelancer/proposals

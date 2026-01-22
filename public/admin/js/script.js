@@ -217,17 +217,5 @@ if (sort) {
 
 // End Sắp xếp
 
-// Side bar
-document.addEventListener("DOMContentLoaded", function () {
-  var sidebar = document.querySelector(".sider");
-  var main = document.querySelector(".main");
-  var toggleBtn = document.querySelector('[data-toggle="sidebar"]');
 
-  if (!sidebar || !main || !toggleBtn) return;
 
-  toggleBtn.addEventListener("click", function () {
-    sidebar.classList.toggle("is-closed");
-    main.classList.toggle("sidebar-closed");
-  });
-});
-// End Side Bar

@@ -1,32 +1,25 @@
 header.header
   .container-fluid
     .row.align-items-center
+      //- Bên trái: Logo hoặc Tên trang (Khớp với độ rộng sidebar khi thu nhỏ)
+      .col-6.d-flex.align-items-center
+        .inner-logo
+          a(href=`${prefixAdmin}/dashboard`) 
+            span.brand-text ADMIN
+            span.brand-dot .
 
-      .col-3.d-flex.align-items-center
-        button.sidebar-toggle(
-          type="button"
-          data-toggle="sidebar"
-          aria-label="Toggle sidebar"
-        )
-          i.fas.fa-bars
-
-        .inner-logo.ml-3
-          a(href=`${prefixAdmin}/dashboard`) ADMIN
-
-      .col-9.text-right
-        .dropdown
-          button#userMenuButton.btn.btn-sm.dropdown-toggle(
+      //- Bên phải: User Menu
+      .col-6.text-right
+        .user-dropdown.dropdown
+          button#userMenuButton.btn.dropdown-toggle(
             type="button"
             data-toggle="dropdown"
+            aria-haspopup="true"
             aria-expanded="false"
           )
-            img(
-              src=user.avatar 
-              class="rounded-circle"
-              style="width:33px; height:33px; object-fit:cover;"
+            .user-info.d-none.d-md-flex
+              span.user-name Chào mừng, #{user.fullName} !
+            img.user-avatar(
+              src=user.avatar ? user.avatar : "/admin/images/avatar.png"
+              alt=user.fullName
             )
-
-          .dropdown-menu.dropdown-menu-right(aria-labelledby="userMenuButton")
-            a.dropdown-item(href=`${prefixAdmin}/my-account`) Hồ sơ cá nhân
-            .dropdown-divider
-            a.dropdown-item.text-danger(href=`${prefixAdmin}/auth/logout`) Đăng xuất

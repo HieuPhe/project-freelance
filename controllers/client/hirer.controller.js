@@ -1,6 +1,6 @@
 const Project = require("../../models/project.model");
 const Proposal = require("../../models/proposal.model");
-
+const Notification = require("../../models/notification.model");
 
 // [GET] /hirer/projects
 // Danh sách công việc của hirer hiện tại
@@ -95,19 +95,31 @@ module.exports.acceptProposal = async (req, res) => {
   project.acceptedFreelancerId = proposal.freelancerId;
   await project.save();
 
-  // 🔔 Thông báo cho freelancer khi được chấp nhận
+  const freelancerId = proposal.freelancerId; // ✅ BẮT BUỘC PHẢI CÓ
+
+  const hirerId = req.user._id;
+
+  // ===============================
+  // NOTIFICATION → FREELANCER
+  // ===============================
   const notification = await Notification.create({
-    userId: proposal.freelancerId,
+    userId: freelancerId,
+    type: "PROPOSAL_ACCEPTED",
     title: "Đề xuất được chấp nhận",
-    content: `Đề xuất của bạn cho công việc "${project.title}" đã được chấp nhận`,
-    link: `/freelancer/jobs`,
+    content: `Hirer đã chấp nhận đề xuất của bạn`,
+    projectId: project._id,
+    fromUser: hirerId,
   });
 
+  // SOCKET – GIỐNG PHẦN GỬI PROPOSAL
   if (global._io) {
-    global._io.to(`user_${proposal.freelancerId}`).emit("new-notification", {
+    global._io.to(`user_${freelancerId}`).emit("NOTIFICATION_NEW", {
+      _id: notification._id,
+      type: notification.type,
       title: notification.title,
       content: notification.content,
-      link: notification.link,
+      projectId: project._id,
+      isRead: false,
       createdAt: notification.createdAt,
     });
   }
@@ -147,19 +159,27 @@ module.exports.rejectProposal = async (req, res) => {
   proposal.status = "REJECTED";
   await proposal.save();
 
-  // 🔔 Thông báo cho freelancer khi bị từ chối
-   const notification = await Notification.create({
-    userId: proposal.freelancerId,
+  const freelancerId = proposal.freelancerId;
+
+  const hirerId = req.user._id;
+
+  const notification = await Notification.create({
+    userId: freelancerId,
+    type: "PROPOSAL_REJECTED",
     title: "Đề xuất bị từ chối",
-    content: "Đề xuất của bạn đã bị từ chối",
-    link: "/freelancer/proposals",
+    content: `Hirer đã từ chối đề xuất của bạn`,
+    projectId: project._id,
+    fromUser: hirerId,
   });
 
   if (global._io) {
-    global._io.to(`user_${proposal.freelancerId}`).emit("new-notification", {
+    global._io.to(`user_${freelancerId}`).emit("NOTIFICATION_NEW", {
+      _id: notification._id,
+      type: notification.type,
       title: notification.title,
       content: notification.content,
-      link: notification.link,
+      projectId: project._id,
+      isRead: false,
       createdAt: notification.createdAt,
     });
   }
@@ -303,23 +323,29 @@ module.exports.completeProject = async (req, res) => {
     project.status = "CLOSED";
     await project.save();
 
-    // 🔔 Thông báo cho freelancer khi công việc hoàn thành
+    const freelancerId = project.acceptedFreelancerId;
+
+    const hirerId = req.user._id;
+
     const notification = await Notification.create({
-      userId: project.acceptedFreelancerId,
+      userId: freelancerId,
+      type: "JOB_COMPELETED",
       title: "Công việc đã hoàn thành",
-      content: `Hirer đã hoàn thành "${project.title}"`,
-      link: "/freelancer/history",
+      content: `Hirer đã đánh dấu hoàn thành dự án`,
+      projectId: project._id,
+      fromUser: hirerId,
     });
 
     if (global._io) {
-      global._io
-        .to(`user_${project.acceptedFreelancerId}`)
-        .emit("new-notification", {
-          title: notification.title,
-          content: notification.content,
-          link: notification.link,
-          createdAt: notification.createdAt,
-        });
+      global._io.to(`user_${freelancerId}`).emit("NOTIFICATION_NEW", {
+        _id: notification._id,
+        type: notification.type,
+        title: notification.title,
+        content: notification.content,
+        projectId: project._id,
+        isRead: false,
+        createdAt: notification.createdAt,
+      });
     }
 
     req.flash("success", "Đã đánh dấu hoàn thành công việc!");

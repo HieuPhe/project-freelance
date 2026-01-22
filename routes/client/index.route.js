@@ -14,7 +14,7 @@ const freelancerRoute = require("./freelancer.route");
 const hirerRoute = require("./hirer.route");
 const notificationRoute = require("./notification.route");
 const chatRoute = require("./chat.route");
-const progressRoute = require("./progess.route");
+const progressRoute = require("./progress.route");
 
 module.exports = (app) => {
   app.use(categoryMiddleware.category);
